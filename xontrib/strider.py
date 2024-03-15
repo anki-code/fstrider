@@ -1,6 +1,7 @@
+from pathlib import Path
 from strider.strider import Strider
 
-@aliases.register("a")
+@aliases.register("s")
 def _strider():
     # argp = argparse.ArgumentParser(description=f"Strider.")
     # argp.add_argument('path', nargs='?', default='.', help="Starting path.")

@@ -20,7 +20,7 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires=['xonsh[full]'],
     scripts=['strider/strider'],
-    packages=['xontrib'],
+    packages=['strider', 'xontrib'],
     package_data={'strider': ['*.py'], 'xontrib': ['*.py', '*.xsh']},
     platforms='any',
     url='https://github.com/strider/strider',
