@@ -1,3 +1,3 @@
 # strider
 
-Soon.
+File system navigator. 

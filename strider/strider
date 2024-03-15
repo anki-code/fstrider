@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+import argparse
+from strider.strider import Strider
+from pathlib import Path
+
+
+def main():
+    argp = argparse.ArgumentParser(description=f"Strider.")
+    argp.add_argument('path', nargs='?', default='.', help="Starting path.")
+    args = argp.parse_args()
+
+    strider = Strider(current_path=Path(args.path) )
+    strider.stride()
+    del strider
+
+if __name__ == '__main__':
+    main()
