@@ -106,6 +106,7 @@ class TextInputDialog:
         )
         # self.dialog = list_dialog('321','123', values=[('1','1'), ('2','2')], is_modal=True)
 
+
     def __pt_container__(self):
         return self.dialog
 
@@ -183,9 +184,10 @@ class Strider:
         'app_associations_save_file': False
     }
 
-    def __init__(self, current_path: Path):
+    def __init__(self, current_path: Path = None):
         self.title = Label('Welcome to Strider!')
 
+        current_path = '.' if current_path is None else current_path
         self.current_path = Path(current_path).absolute()
         self.list = self.create_list()
 
@@ -196,12 +198,15 @@ class Strider:
 
         self.bindings = KeyBindings()
 
+        self.app()
+
+        Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
     def __del__(self):
         Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
 
-    def stride(self):
+    def app(self):
         first_selected = None
         if not self.current_path.is_dir():
             first_selected = self.current_path
@@ -691,6 +696,4 @@ if __name__ == '__main__':
     argp.add_argument('path', nargs='?', default='.', help="Starting path.")
     args = argp.parse_args()
 
-    strider = Strider(current_path=Path(args.path) )
-    strider.stride()
-    del strider
+    Strider(current_path=Path(args.path) )

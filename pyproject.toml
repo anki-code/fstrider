@@ -1,0 +1,59 @@
+[project]
+name = "strider"
+version = "0.1.0"
+description = "A sample Python project named strider"
+authors = [
+    { name = "anki-code", email = "no@no.no" },
+]
+
+[tool.setuptools]
+packages = ["strider", "xontrib"]
+#package-dir = {xontrib = "xontrib"}
+include-package-data = true
+
+[tool.poetry]
+name = "strider"
+version = "2.1.6"
+description = "A TUI to recover overwritten or deleted data."
+authors = ["PabloLec <pablolec@pm.me>"]
+license = "GPL-3.0 License"
+readme = "README.md"
+homepage = "https://github.com/PabloLec/strider"
+repository = "https://github.com/PabloLec/strider"
+documentation = "https://github.com/PabloLec/strider#readme"
+keywords = [
+    "cli",
+    "console",
+    "cui",
+    "tui",
+    "terminal",
+    "linux",
+    "unix",
+    "education",
+    "teaching",
+    "training",
+    "teach",
+    "learn"
+]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Shells",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Terminals",
+    "Topic :: Utilities"
+]
+
+[tool.poetry.scripts]
+strider = "strider.__init__:main"
+
+#[tool.poetry.dependencies]
+#python = "^3.8.1"
+#textual = "0.52.1"
+
+#[project.packages]
+#include = ["strider", "xontrib"]
