@@ -294,8 +294,7 @@ class Strider:
 
         @radio_list.control.key_bindings.add("left")
         def _list_left(event):
-            self.change_path(self.current_path.parent)
-            self.update_list()
+            self.move(self.current_path.parent)
 
         @radio_list.control.key_bindings.add("enter")
         def _list_enter(event):
@@ -312,8 +311,7 @@ class Strider:
             radio_list._handle_enter()
             cv = radio_list.current_value
             if type(cv) is pathlib.PosixPath and cv.is_dir():
-                self.change_path(radio_list.current_value)
-                self.update_list()
+                self.move(radio_list.current_value)
             else:
                 # open_in_terminal(radio_list.current_value)
                 pass
@@ -322,8 +320,7 @@ class Strider:
         def _list_space(event):
             radio_list._handle_enter()
             if type(radio_list.current_value) is pathlib.PosixPath:
-                self.change_path(radio_list.current_value)
-                self.set_title(self.current_path, msg='Actions')
+                self.move(radio_list.current_value, title_msg='Actions', update_list=False)
                 radio_list.values = self.list_file_actions(radio_list.current_value)
                 radio_list._selected_index = 0
                 self.history[str(radio_list.current_value.parent)] = str(radio_list.current_value)
@@ -422,17 +419,18 @@ class Strider:
     def change_path(self, new_path):
         self.current_path = new_path.absolute()
 
-    def update_list(self, selected_by_value=None, file_msg=None):
-        self.set_title(self.current_path)
+    def update_list(self, selected_by_value=None, title_msg=None, file_msg=None):
+        self.set_title(self.current_path, msg=title_msg)
         self.list.values, self.list._selected_index = self.get_list_values(file_msg=file_msg).values()
         if selected_by_value:
             self.list._selected_index = get_index_in_values(self.list.values, payload=selected_by_value)
 
-    def move(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None):
+    def move(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None, update_list=True):
         p = p if p else self.current_path
         self.change_path(p)
         self.set_title(p, msg=title_msg)
-        self.update_list(selected_by_value=selected_by_value, file_msg=file_msg)
+        if update_list:
+            self.update_list(selected_by_value=selected_by_value, title_msg=None, file_msg=file_msg)
 
     def do_open_with(self, path):
         apps = get_os_applications()
