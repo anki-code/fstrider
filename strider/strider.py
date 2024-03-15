@@ -357,7 +357,7 @@ class Strider:
             self.copy_path_clp(self.current_path)
 
         @radio_list.control.key_bindings.add("escape")
-        @radio_list.control.key_bindings.add("f1")
+        #@radio_list.control.key_bindings.add("f1")
         def _key_exit(event):
             event.app.exit()
 
@@ -418,6 +418,7 @@ class Strider:
 
     def change_path(self, new_path):
         self.current_path = new_path.absolute()
+        os.chdir(self.current_path)
 
     def update_list(self, selected_by_value=None, title_msg=None, file_msg=None):
         self.set_title(self.current_path, msg=title_msg)
