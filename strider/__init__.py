@@ -1,4 +1,5 @@
 import sys
+import base64
 import argparse
 
 from strider.strider import Strider
@@ -10,8 +11,7 @@ def main() -> None:
     argp.add_argument('path', nargs='?', default='.', help="Starting path.")
     args = argp.parse_args()
 
-    if args.path == '///':
-        import base64
+    if args.path == base64.b64decode('Ly8v').decode():
         from random import random
         d1 = 'CiAgICAgICAgICAgKioqKioqKiogICAgCiAgICAgICAgICAqKiAqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKiAgICAgICAgCiAgICAgICAgICAqKioqKioqKiogICAgCiAqICAgICAgICoqKioqKiAgICAgICAgCiAqICAgICAgKioqKioqKioqICAgICAgCiAqKiAgICAqKioqKioqKiAqICAgICAgCiAqKiogICoqKioqKioqKiAgICAgICAgCiAqKioqKioqKioqKioqKiAgICAgICAgCiAgKioqKioqKioqKioqKiAgICAgICAgCiAgICoqKioqKioqKioqICAgICAgICAgCiAgICAqKioqKioqKiogICAgICAgICAgCiAgICAgKioqKiAqKiAgICAgICAgICAgCiAgICAgICoqICAgKiAgICAgICAgICAgCiAgICAgICAqKiAgKiAgICAgICAgICAgCiAgICAgICAgICAgKiogICAgICAgICAgCiAgICAgICAgICBeXl5eXiAgICAgICAgCg=='
         d2 = 'CiAgICAgICAgICAgKioqKioqKiogICAgCiAgICAgICAgICAqKiAqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKiAgICAgICAgCiAgICAgICAgICAqKioqKioqKiogICAgCiAqICAgICAgICoqKioqKiAgICAgICAgCiAqICAgICAgKioqKioqKiAgICAgICAgCiAqKiAgICAqKioqKioqKioqICAgICAgCiAqKiogICoqKioqKioqKiAqICAgICAgCiAqKioqKioqKioqKioqKiAgICAgICAgCiAgKioqKioqKioqKioqKiAgICAgICAgCiAgICoqKioqKioqKioqICAgICAgICAgCiAgICAqKioqKioqKiogICAgICAgICAgCiAgICAgKioqKiAqKiAgICAgICAgICAgCiAgICAgICoqICAgKioqICAgICAgICAgCiAgICAgICogICAgICAgICAgICAgICAgCiAgICAgICoqICAgICAgICAgICAgICAgCiAgICAgXl5eXiAgICAgICAgICAgICAgCg=='
