@@ -10,7 +10,7 @@ def main() -> None:
     argp.add_argument('path', nargs='?', default='.', help="Starting path.")
     args = argp.parse_args()
 
-    if args.path == '/':
+    if args.path == '///':
         import base64
         from random import random
         d1 = 'CiAgICAgICAgICAgKioqKioqKiogICAgCiAgICAgICAgICAqKiAqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKioqKioqICAgCiAgICAgICAgICAqKioqKiAgICAgICAgCiAgICAgICAgICAqKioqKioqKiogICAgCiAqICAgICAgICoqKioqKiAgICAgICAgCiAqICAgICAgKioqKioqKioqICAgICAgCiAqKiAgICAqKioqKioqKiAqICAgICAgCiAqKiogICoqKioqKioqKiAgICAgICAgCiAqKioqKioqKioqKioqKiAgICAgICAgCiAgKioqKioqKioqKioqKiAgICAgICAgCiAgICoqKioqKioqKioqICAgICAgICAgCiAgICAqKioqKioqKiogICAgICAgICAgCiAgICAgKioqKiAqKiAgICAgICAgICAgCiAgICAgICoqICAgKiAgICAgICAgICAgCiAgICAgICAqKiAgKiAgICAgICAgICAgCiAgICAgICAgICAgKiogICAgICAgICAgCiAgICAgICAgICBeXl5eXiAgICAgICAgCg=='
