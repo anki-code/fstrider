@@ -502,13 +502,3 @@ class Strider:
             open_dialog = TextInputDialog(title=title, label_text=label_text, text_area_text=text_area_text)
             await self.show_dialog_as_float(open_dialog, callback, input_data)
         ensure_future(coroutine())
-
-
-
-if __name__ == '__main__':
-    import argparse
-    argp = argparse.ArgumentParser(description=f"Strider.")
-    argp.add_argument('path', nargs='?', default='.', help="Starting path.")
-    args = argp.parse_args()
-
-    Strider(current_path=Path(args.path) )
