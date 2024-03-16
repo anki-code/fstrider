@@ -22,10 +22,10 @@ def get_os_applications():
     apps = sorted(apps, key=lambda s: s.lower())
     return apps
 
-def load_app_associations(self):
+def load_app_associations(file):
     """Load file associations."""
-    if Path(self._app_associations_file).exists():
-        with open(self._app_associations_file, 'r') as f:
+    if Path(file).exists():
+        with open(file, 'r') as f:
             return json.load(f)
     else:
         return {

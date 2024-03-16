@@ -45,7 +45,7 @@ class Strider:
         self.list = self.create_list()
 
         self._app_associations_file = '/tmp/strider_app_associations_file.json'
-        self.app_associations = load_app_associations()
+        self.app_associations = load_app_associations(self._app_associations_file)
 
         self.style = self.load_style()
 
