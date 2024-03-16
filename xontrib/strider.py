@@ -1,3 +1,5 @@
+"""Xontrib for Strider."""
+
 import strider
 
 @aliases.register("s")
