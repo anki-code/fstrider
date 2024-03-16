@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+import strider
+
+if __name__ == "__main__":
+    strider.main()

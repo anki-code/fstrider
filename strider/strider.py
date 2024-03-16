@@ -362,7 +362,6 @@ class Strider:
             self.copy_path_clp(self.current_path)
 
         @radio_list.control.key_bindings.add("escape")
-        #@radio_list.control.key_bindings.add("f1")
         def _key_exit(event):
             event.app.exit()
 

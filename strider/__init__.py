@@ -1,5 +1,6 @@
 from strider.strider import Strider
 
+
 def main() -> None:
     Strider()
 
