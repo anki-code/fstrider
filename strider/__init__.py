@@ -1,5 +1,5 @@
-import argparse
 import sys
+import argparse
 
 from strider.strider import Strider
 
