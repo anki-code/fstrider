@@ -1,185 +1,38 @@
+"""Strider"""
+
 import json
 import os
 import pathlib
 import shutil
-import subprocess
 import html
 import functools
 
-from xonsh.platform import ON_LINUX, ON_DARWIN
-
 from pathlib import Path
+from asyncio import ensure_future
+
 from prompt_toolkit import HTML
-from prompt_toolkit.keys import Keys
 from prompt_toolkit.styles import Style
-from prompt_toolkit.layout import Layout
-from prompt_toolkit.application import Application
-from prompt_toolkit.layout.containers import HSplit
-from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.widgets import RadioList, Label, HorizontalLine
-from prompt_toolkit.shortcuts import input_dialog, yes_no_dialog, message_dialog
-from prompt_toolkit.key_binding.key_bindings import KeyBindings, merge_key_bindings
-from prompt_toolkit.layout.containers import FloatContainer
-
-from prompt_toolkit.layout.containers import (
-    AnyContainer,
-    ConditionalContainer,
-    Container,
-    Float,
-    FloatContainer,
-    HSplit,
-    Window,
-
-)
-from prompt_toolkit.widgets import Shadow, Box
-
-import datetime
-from asyncio import Future, ensure_future
-
-from prompt_toolkit.application import Application
-from prompt_toolkit.application.current import get_app
-from prompt_toolkit.completion import PathCompleter
-from prompt_toolkit.filters import Condition
-from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.layout.containers import (
-    ConditionalContainer,
-    Float,
-    HSplit,
-    VSplit,
-    Window,
-    WindowAlign,
-)
-from prompt_toolkit.layout.controls import FormattedTextControl
-from prompt_toolkit.layout.dimension import D
 from prompt_toolkit.layout.layout import Layout
-from prompt_toolkit.layout.menus import CompletionsMenu
-from prompt_toolkit.lexers import DynamicLexer, PygmentsLexer
-from prompt_toolkit.search import start_search
-from prompt_toolkit.styles import Style
-from prompt_toolkit.widgets import (
-    Button,
-    Dialog,
-    Label,
-    MenuContainer,
-    MenuItem,
-    SearchToolbar,
-    TextArea,
-)
+from prompt_toolkit.application import Application
+from prompt_toolkit.widgets import RadioList, Label
+from prompt_toolkit.application.current import get_app
+from prompt_toolkit.layout.containers import FloatContainer
+from prompt_toolkit.key_binding.defaults import load_key_bindings
+from prompt_toolkit.key_binding.key_bindings import KeyBindings, merge_key_bindings
+from prompt_toolkit.layout.containers import Float, HSplit
 
-#from .ptk import list_dialog, ChooseList
-
-
-
-
-class TextInputDialog:
-    def __init__(self, title="", label_text="", text_area_text='', completer=None):
-        self.future = Future()
-
-        def accept_text(buf):
-            get_app().layout.focus(ok_button)
-            buf.complete_state = None
-            return True
-
-        def accept():
-            self.future.set_result(self.text_area.text)
-
-        def cancel():
-            self.future.set_result(None)
-
-        self.text_area = TextArea(
-            completer=completer,
-            multiline=False,
-            width=D(preferred=40),
-            accept_handler=accept_text,
-            text=text_area_text
-        )
-
-        ok_button = Button(text="OK", handler=accept)
-        cancel_button = Button(text="Cancel", handler=cancel)
-
-        self.dialog = Dialog(
-            title=title,
-            body=HSplit([Label(text=label_text), self.text_area]),
-            buttons=[ok_button, cancel_button],
-            width=D(preferred=80),
-            modal=True,
-        )
-        # self.dialog = list_dialog('321','123', values=[('1','1'), ('2','2')], is_modal=True)
-
-
-    def __pt_container__(self):
-        return self.dialog
-
-
-def copy_to_clp(s):
-    import pyperclip
-    pyperclip.copy(s)
-
-def sort_files(list_sets):
-    def sort_func(s):
-        return str(s[0]).lower()
-
-    return sorted(list_sets, key=sort_func)
-
-def open_in_os(filename: Path, app_name: str = None):
-    if app_name:
-        return subprocess.call(('open', '-a', app_name, '-F', filename))
-    else:
-        return subprocess.call(('open', '-F', filename))
-
-def get_os_applications():
-    if ON_DARWIN:
-        apps = [a.name.replace('.app', '').replace('.pkg', '') for a in Path('/Applications').glob('*') if
-                not str(a.name).startswith('.')]
-    else:
-        raise Exception('Unsupported platform.')
-
-    apps = sorted(apps, key=lambda s: s.lower())
-    return apps
-
-def has_read_access(path):
-    return os.access(path, os.R_OK)
-
-def access_type(path):
-    p = Path(path)
-    p_access = has_read_access(path)
-    try:
-        p_exists = p.exists()
-    except PermissionError:
-        p_exists = None
-
-    if p_exists is None:
-        return 'noaccess'
-    else:
-        if p_exists:
-            if p_access:
-                return 'exist_access'
-            else:
-                return 'exist_noaccess'
-        else:
-            return 'notexist'
-
-def get_index_in_values(values, payload=None, text=None, default_index=0):
-    for num, p in enumerate(values):
-        if payload and (str(p[0]) == payload or p[0] == payload):
-            return num
-        if text and p[1] == text:
-            return num
-    return default_index
-
-def create_path_if_needed(path):
-    if not (path := Path(path)).exists():
-        path.mkdir(parents=True, exist_ok=True)
-
-# def open_in_terminal(filename: Path):
-#     subprocess.call(('vim', filename))
-
-
+from strider.ptk import TextInputDialog
+from strider.clipboard import copy_to_clp
+from strider.os import open_in_os, get_os_applications, load_app_associations
+from strider.fs import access_type, copy_path
 
 
 class Strider:
+    """Strider"""
+
     history = {}
     env = {
+        'os_path_change': True,
         'show_symlink_paths': True,
         'app_associations_save_file': False
     }
@@ -192,21 +45,19 @@ class Strider:
         self.list = self.create_list()
 
         self._app_associations_file = '/tmp/strider_app_associations_file.json'
-        self.app_associations = self.load_app_associations()
+        self.app_associations = load_app_associations()
 
         self.style = self.load_style()
 
         self.bindings = KeyBindings()
 
-        self.app()
+        self.stride()
 
         Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
-    def __del__(self):
-        Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
-
-    def app(self):
+    def stride(self):
+        """Start striding."""
         first_selected = None
         if not self.current_path.is_dir():
             first_selected = self.current_path
@@ -216,15 +67,7 @@ class Strider:
 
         self.root_container = FloatContainer(
             content=HSplit([self.title, self.list]),
-            floats=[
-                # Float(
-                #     xcursor=True,
-                #     ycursor=True,
-                #     content=ConditionalContainer(
-                #         content=Shadow(body=title), filter=True
-                #     ),
-                # ),
-            ]
+            floats=[]
         )
         layout = Layout(self.root_container)
 
@@ -239,8 +82,10 @@ class Strider:
         application.run()
 
     def load_style(self):
+        """Load style."""
         style = Style.from_dict({})
 
+        # FEAT
         # style = Style.from_dict({
         #     'dialog': 'bg:#111111',
         #     'dialog frame.label': 'bg:#ffffff #000000',
@@ -258,18 +103,9 @@ class Strider:
 
         return style
 
-    def load_app_associations(self):
-        if Path(self._app_associations_file).exists():
-            with open(self._app_associations_file, 'r') as f:
-                return json.load(f)
-        else:
-            return {
-                '.py': 'PyCharm CE',
-                '.txt': 'kate',
-            }
-                
-    def set_title(self, p: Path, msg=None):
 
+    def set_title(self, p: Path, msg=None):
+        """Set the main title."""
         at = access_type(p)
         if 'noaccess' in at:
             color = 'red'
@@ -291,7 +127,8 @@ class Strider:
 
 
     def create_list(self):
-        default = None  # todo
+        """Create the main list."""
+        default = None
         radio_list = RadioList([('', '')], default)
         radio_list.open_character = radio_list.close_character = ''
         radio_list.control.key_bindings.remove("enter")  # Remove the enter key binding so that we can augment it
@@ -345,7 +182,7 @@ class Strider:
         @radio_list.control.key_bindings.add("+")
         def _key_copy_from_path(event):
             def callback(source_path: str, input_data: dict):
-                r = self.copy(Path(source_path), str(input_data['target_path'])+'/')
+                r = copy_path(Path(source_path), str(input_data['target_path'])+'/')
                 self.move(r['move']['p'], selected_by_value=r['move']['selected_by_value'],
                           file_msg=r['move']['file_msg'])
                 return r['result']
@@ -367,7 +204,28 @@ class Strider:
 
         return radio_list
 
+
+    @staticmethod
+    def sort_files_in_list(list_sets):
+        """Sort files in the list of sets that represent the main list."""
+        def sort_func(s):
+            return str(s[0]).lower()
+
+        return sorted(list_sets, key=sort_func)
+
+
+    @staticmethod
+    def get_index_in_values(values, payload=None, text=None, default_index=0):
+        """Get index in the list of sets that represent the main list."""
+        for num, p in enumerate(values):
+            if payload and (str(p[0]) == payload or p[0] == payload):
+                return num
+            if text and p[1] == text:
+                return num
+        return default_index
+
     def get_list_values(self, file_msg : dict = None):
+        """Get the list of files for the main list."""
         pwd = self.current_path
         pwds = str(pwd)
         dirs = []
@@ -407,37 +265,53 @@ class Strider:
             except:
                 files.append((p, HTML(f'<style fg="red">!EXCEPTION: {fd}</style>{msg}')))
 
-        values = sort_files(dirs) + sort_files(files)
+        values = self.sort_files_in_list(dirs) + self.sort_files_in_list(files)
 
         history_index = 0
         if not values:
             values = [(pwd, HTML(f'<style fg="grey"><b>.</b></style>'))]
         elif pwds in self.history:
-            history_index = get_index_in_values(values, payload=self.history[pwds])
+            history_index = self.get_index_in_values(values, payload=self.history[pwds])
 
         return {
             'values': values,
             'selected_index': history_index,
         }
 
-    def change_path(self, new_path):
-        self.current_path = new_path.absolute()
-        os.chdir(self.current_path)
 
     def update_list(self, selected_by_value=None, title_msg=None, file_msg=None):
+        """
+        Update list of files in the main list.
+        :param selected_by_value:
+        :param title_msg:
+        :param file_msg:
+        :return:
+        """
         self.set_title(self.current_path, msg=title_msg)
         self.list.values, self.list._selected_index = self.get_list_values(file_msg=file_msg).values()
         if selected_by_value:
-            self.list._selected_index = get_index_in_values(self.list.values, payload=selected_by_value)
+            self.list._selected_index = self.get_index_in_values(self.list.values, payload=selected_by_value)
 
     def move(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None, update_list=True):
+        """
+        Move to the path.
+        :param p:
+        :param selected_by_value:
+        :param title_msg:
+        :param file_msg:
+        :param update_list:
+        :return:
+        """
         p = p if p else self.current_path
-        self.change_path(p)
+        self.current_path = p.absolute()
         self.set_title(p, msg=title_msg)
+        if self.env['os_path_change']:
+            os.chdir(self.current_path)
         if update_list:
             self.update_list(selected_by_value=selected_by_value, title_msg=None, file_msg=file_msg)
 
     def do_open_with(self, path):
+        """Show "Open with" menu."""
         apps = get_os_applications()
         self.set_title(self.current_path, msg='Open with')
         self.list.values = [(open_in_os, 'OS associated')] + [(functools.partial(self.open_in_os_app, app_name=a), a) for a in apps]
@@ -455,38 +329,31 @@ class Strider:
                     self.list._selected_index = i
                     break
         else:
-            # TODO: install?
+            # FEAT
             pass
 
     def list_file_actions(self, filepath: Path):
-        # filepath = self.current_path
+        """Show menu with actions."""
         if filepath.exists():
             funcs = {
-                # 'Back': lambda path: move(self.current_path.parent),
+                # 'Back': lambda path: move(self.current_path.parent),  # FEAT
                 'Copy path': self.copy_path_clp,
                 'Open with': self.do_open_with,
                 'Rename': self.do_rename,
                 'Delete': self.do_delete,
                 'Copy': self.do_copy,
                 'Move': self.do_move,
-                # 'New file': func_file_new,
+                # 'New file': do_file_new,  # FEAT
             }
 
             if filepath.is_dir():
                 add_funcs = {
                     'Create subdirectory': self.do_create_dir,
-                    # 'Delete': 'func_dir_delete',
-                    # 'Archive': '',
-                    # 'Tag date': '',
-                    # 'Tag date and time': '',
+                    # 'Archive': do_archive,  # FEAT
                 }
             else:
                 add_funcs = {
-                    # 'Delete': 'func_file_delete',
-                    # 'Copy to clipboard': '',
-                    # 'Copy path': '',
-                    # 'Tag date': '',
-                    # 'Tag date and time': '',
+                    # 'Copy content to clipboard': do_file_copy_content,  # FEAT
                 }
             funcs = {**funcs, **add_funcs}
         else:
@@ -498,15 +365,117 @@ class Strider:
 
         return [(func, HTML(f'<style fg="{color}">{name}</style>')) for name, func in funcs.items()]
 
+
     def copy_path_clp(self, path):
+        """Copy path."""
         s = str(path)
         s = repr(s) if ' ' in s else s
         copy_to_clp(s)
         cp = self.current_path
-        self.move(path.parent, selected_by_value=path, file_msg={path:'Path copied!'})
+        self.move(path.parent, selected_by_value=path, file_msg={path: 'Path copied!'})
+
+
+    def open_in_os_app(self, filename: Path, app_name: str = None):
+        """Opening in OS associated application."""
+        if self.env['app_associations_save_file']:
+            self.app_associations[str(self.current_path)] = app_name
+        if app_name and self.current_path.suffix:
+            self.app_associations[self.current_path.suffix] = app_name
+
+        if not app_name:
+            if str(filename) in self.app_associations:
+                app_name = self.app_associations[str(filename)]
+            elif filename.suffix in self.app_associations:
+                app_name = self.app_associations[filename.suffix]
+
+        return open_in_os(filename, app_name)
+
+
+    def do_rename(self, filename: Path):
+        """Doing rename."""
+        def callback(new_name, input_data):
+            if new_name:
+                if (exists := self.current_path.parent / new_name).exists():  # FEAT: overwrite check
+                    raise Exception(f'Already exists: {exists}')
+                new_path = self.current_path.rename(new_name).absolute()
+                self.move(new_path.parent, selected_by_value=new_path)
+        self.input_dialog(title='Rename', label_text=f'New name:', callback=callback, text_area_text=self.current_path.name)
+
+
+
+
+    def callback_copy(self, target_path: str, input_data: dict):
+        """Callback to doing copy path."""
+        r = copy_path(input_data['source_path'], target_path)
+        self.move(r['move']['p'], selected_by_value=r['move']['selected_by_value'], file_msg=r['move']['file_msg'])
+        return r['result']
+
+    def do_copy(self, source_path: Path):
+        """Doing copy path."""
+        msg = """If target path ends with `/` the source will be copied to `target/source`.\nIn other cases it will be copied to target or merged with existent.\n\n"""
+        self.input_dialog(title='Copy', label_text=msg+f'Copy to:', callback=self.callback_copy, input_data={'source_path': source_path}, text_area_text=str(source_path))
+
+
+    def callback_move(self, target_path: str, input_data: dict):
+        """Callback to doing move path."""
+        source_path = input_data['source_path']
+        sp = Path(source_path)
+        tp = Path(target_path)
+        if tp.expanduser().absolute() == sp.expanduser().absolute():
+            self.move(tp.parent, selected_by_value=tp, file_msg={tp: f'Moving is not needed :)'})
+            return
+
+        copy_result = self.callback_copy(target_path, input_data)
+
+        self. callback_delete(source_path, input_data)
+        if copy_result == 'merge':
+            msg = 'Merged with'
+        else:
+            msg = 'Moved from'
+
+        mv = tp if target_path.endswith('/') else tp.parent
+        selected = (tp/sp.name) if target_path.endswith('/') else tp
+        self.move(mv, selected_by_value=selected, file_msg={selected: f'{msg} {source_path}'})
+
+    def do_move(self, source_path: Path):
+        """Doing move path."""
+        msg = """If target path ends with `/` the source will be moved to `target/source`.\nIn other cases it will be moved to target or merged with existent.\n\n"""
+        self.input_dialog(title='Move', label_text=msg+f'Move to:', callback=self.callback_move, input_data={'source_path': source_path}, text_area_text=str(source_path))
+
+
+
+    def do_create_dir(self, basedir: Path):
+        """Doing "Create directory"."""
+        def callback(dirname, input_data):
+            if dirname:
+                target_dir = basedir / dirname
+                target_dir.mkdir(parents=True, exist_ok=True)
+                self.move(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]))
+        self.input_dialog(title='New directory', label_text=f'Create in {basedir}:', callback=callback)
+
+
+    def do_create_this_dir(self, basedir: Path):
+        """Doing "Create this directory"."""
+        basedir.mkdir(parents=True, exist_ok=True)
+        self.move(basedir)
+
+
+    def callback_delete(self, delpath, input_data):
+        """Callback to delete path."""
+        dp = Path(delpath)
+        if dp.is_dir():
+            shutil.rmtree(dp)
+        else:
+            dp.unlink()
+        self.move(dp.parent)
+
+    def do_delete(self, filename: Path):
+        """Show menu to delete path."""
+        self.input_dialog(title='Delete', label_text=f'Delete:', callback=self.callback_delete, text_area_text=str(filename))
+
 
     async def show_dialog_as_float(self, dialog, callback, input_data={}):
-        """Coroutine."""
+        """Coroutine. Show dialog as float."""
         float_ = Float(content=dialog)
         self.root_container.floats.insert(0, float_)
 
@@ -528,164 +497,11 @@ class Strider:
         return dialog_result
 
     def input_dialog(self, title, label_text, callback, input_data={}, text_area_text=''):
+        """Construct input dialog."""
         async def coroutine():
             open_dialog = TextInputDialog(title=title, label_text=label_text, text_area_text=text_area_text)
             await self.show_dialog_as_float(open_dialog, callback, input_data)
-
         ensure_future(coroutine())
-
-
-
-
-    def open_in_os_app(self, filename: Path, app_name: str = None):
-        if self.env['app_associations_save_file']:
-            self.app_associations[str(self.current_path)] = app_name
-        if app_name and self.current_path.suffix:
-            self.app_associations[self.current_path.suffix] = app_name
-
-        if not app_name:
-            if str(filename) in self.app_associations:
-                app_name = self.app_associations[str(filename)]
-            elif filename.suffix in self.app_associations:
-                app_name = self.app_associations[filename.suffix]
-
-        return open_in_os(filename, app_name)
-
-
-    def do_rename(self, filename: Path):
-        def callback(new_name, input_data):
-            if new_name:
-                if (exists := self.current_path.parent / new_name).exists():  # FEAT: overwrite check
-                    raise Exception(f'Already exists: {exists}')
-                new_path = self.current_path.rename(new_name).absolute()
-                self.move(new_path.parent, selected_by_value=new_path)
-        self.input_dialog(title='Rename', label_text=f'New name:', callback=callback, text_area_text=self.current_path.name)
-
-    def copy(self, source_path: Path, target_path: str):
-        targetp = Path(target_path).expanduser().absolute()
-        move = {}
-        result = 'unknown'
-        if source_path.is_dir():
-            if target_path.endswith('/'):
-                # If target_path='/target/path/'. Copy `/source/dir` to /target/path/dir`.
-                tp = targetp / source_path.name
-            else:
-                # If target_path='/target/path'. Copy `/source/dir/*` to /target/path/` with replacement.
-                tp = targetp
-
-            if tp == source_path:
-                move = {
-                    'p': tp.parent,
-                    'selected_by_value': tp,
-                    'file_msg': {tp: 'Copying is not needed :)'}
-                }
-            else:
-                if tp.exists():
-                    msg = 'Merged with'
-                    result = 'merge'
-                else:
-                    msg = 'Copied from'
-                    result = 'copy'
-                create_path_if_needed(tp)
-                result_path = shutil.copytree(source_path, tp, dirs_exist_ok=True)
-                move = {
-                    'p': tp.parent,
-                    'selected_by_value': tp,
-                    'file_msg': {tp: f'{msg} {source_path}'}
-                }
-        else:
-            if target_path.endswith('/'):
-                # If target_path = '/target/path/'. Copy `/source/file` to /target/path/file`.
-                tp = targetp / source_path.name
-            else:
-                # If target_path = '/target/new_filename'. Copy `/source/file` to /target/new_filename`.
-                tp = targetp
-
-            if tp == source_path:
-                move = {
-                    'p': tp.parent,
-                    'selected_by_value': tp,
-                    'file_msg': {tp: f'Copying is not needed :)'}
-                }
-                result = 'nocopy'
-            else:
-                create_path_if_needed(tp.parent)
-                if tp.exists():
-                    msg = 'Overwritten by'
-                    result = 'merge'
-                else:
-                    msg = 'Copied from'
-                    result = 'copy'
-                result_path = shutil.copy(source_path, tp)
-                move = {
-                    'p': tp.parent,
-                    'selected_by_value': tp,
-                    'file_msg': {tp: f'{msg} {source_path}'}
-                }
-
-        return {
-            'move': move,
-            'result': result
-        }
-
-    def callback_copy(self, target_path: str, input_data: dict):
-        r = self.copy(input_data['source_path'], target_path)
-        self.move(r['move']['p'], selected_by_value=r['move']['selected_by_value'], file_msg=r['move']['file_msg'])
-        return r['result']
-
-    def do_copy(self, source_path: Path):
-        msg = """If target path ends with `/` the source will be copied to `target/source`.\nIn other cases it will be copied to target or merged with existent.\n\n"""
-        self.input_dialog(title='Copy', label_text=msg+f'Copy to:', callback=self.callback_copy, input_data={'source_path': source_path}, text_area_text=str(source_path))
-
-    def callback_move(self, target_path: str, input_data: dict):
-        source_path = input_data['source_path']
-        sp = Path(source_path)
-        tp = Path(target_path)
-        if tp.expanduser().absolute() == sp.expanduser().absolute():
-            self.move(tp.parent, selected_by_value=tp, file_msg={tp: f'Moving is not needed :)'})
-            return
-
-        copy_result = self.callback_copy(target_path, input_data)
-
-        self. callback_delete(source_path, input_data)
-        if copy_result == 'merge':
-            msg = 'Merged with'
-        else:
-            msg = 'Moved from'
-
-        mv = tp if target_path.endswith('/') else tp.parent
-        selected = (tp/sp.name) if target_path.endswith('/') else tp
-        self.move(mv, selected_by_value=selected, file_msg={selected: f'{msg} {source_path}'})
-
-
-    def do_move(self, source_path: Path):
-        msg = """If target path ends with `/` the source will be moved to `target/source`.\nIn other cases it will be moved to target or merged with existent.\n\n"""
-        self.input_dialog(title='Move', label_text=msg+f'Move to:', callback=self.callback_move, input_data={'source_path': source_path}, text_area_text=str(source_path))
-
-
-
-    def do_create_dir(self, basedir: Path):
-        def callback(dirname, input_data):
-            if dirname:
-                target_dir = basedir / dirname
-                target_dir.mkdir(parents=True, exist_ok=True)
-                self.move(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]))
-        self.input_dialog(title='New directory', label_text=f'Create in {basedir}:', callback=callback)
-
-    def do_create_this_dir(self, basedir: Path):
-        basedir.mkdir(parents=True, exist_ok=True)
-        self.move(basedir)
-
-    def callback_delete(self, delpath, input_data):
-        dp = Path(delpath)
-        if dp.is_dir():
-            shutil.rmtree(dp)
-        else:
-            dp.unlink()
-        self.move(dp.parent)
-
-    def do_delete(self, filename: Path):
-        self.input_dialog(title='Delete', label_text=f'Delete:', callback=self.callback_delete, text_area_text=str(filename))
 
 
 
