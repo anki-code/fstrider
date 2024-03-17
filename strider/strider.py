@@ -305,7 +305,7 @@ class Strider:
         p = p if p else self.current_path
         self.current_path = p.absolute()
         self.set_title(p, msg=title_msg)
-        if self.env['os_path_change']:
+        if self.current_path.is_dir() and self.env['os_path_change']:
             os.chdir(self.current_path)
         if update_list:
             self.update_list(selected_by_value=selected_by_value, title_msg=None, file_msg=file_msg)
