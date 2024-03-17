@@ -1,4 +1,4 @@
-# strider
+
 
 Strider is a file system navigator:
 * to reduce keystrokes during navigation.
