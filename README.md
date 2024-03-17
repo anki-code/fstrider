@@ -4,7 +4,7 @@
 * to be minimalistic until it's needed to do more.
 * to create new paths without annoying asking.
 
-Note! Project status: proof of concept, no guarantees.
+## Note! Project status: proof of concept, no guarantees.
 
 ## Install
 ```xsh
