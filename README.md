@@ -25,6 +25,17 @@ xontrib load strider
 s
 ```
 
+### Keys:
+
+Basic:
+* <kbd>←</kbd> = `cd ..` 
+* <kbd>→</kbd> = `cd <dir>`
+* <kbd>Space</kbd> - open menu.
+* <kbd>⏎ Enter</kbd> - open file or directory using OS associations.
+
+Additional:
+* 
+
 ## Known issues
 
 ### Tested only on Mac OS

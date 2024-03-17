@@ -1,3 +1,5 @@
+"""Prompt toolkit components."""
+
 from asyncio import Future
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.widgets import (
@@ -10,6 +12,7 @@ from prompt_toolkit.widgets import (
 from prompt_toolkit.layout.containers import (
     HSplit,
 )
+from prompt_toolkit.layout.dimension import Dimension as D
 
 
 class TextInputDialog:
