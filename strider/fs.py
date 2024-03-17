@@ -1,6 +1,7 @@
 """Function to work with file system (FS)."""
 
 import os
+import shutil
 from pathlib import Path
 
 
