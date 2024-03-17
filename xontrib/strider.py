@@ -3,5 +3,5 @@
 import strider
 
 @aliases.register("s")
-def _strider():
+def _strider(args):
     strider.main()

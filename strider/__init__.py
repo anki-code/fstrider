@@ -14,11 +14,11 @@ def d2F0Y2ggLW4uMSBzdHJpZGVyIC8vLw(path):
         sys.exit()
 
 
-def main() -> None:
+def main(args=None) -> None:
 
     argp = argparse.ArgumentParser(description=f"Strider.")
     argp.add_argument('path', nargs='?', default='.', help="Starting path.")
-    args = argp.parse_args()
+    args = argp.parse_args(args)
 
     d2F0Y2ggLW4uMSBzdHJpZGVyIC8vLw(args.path)
 
