@@ -33,6 +33,7 @@ Basic:
 * <kbd>→</kbd> - `cd <dir>`.
 * <kbd>Space</kbd> - open menu.
 * <kbd>Enter</kbd> - open file or directory using OS associations.
+* <kbd>Esc</kbd> - quit.
 
 Additional:
 
