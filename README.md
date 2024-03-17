@@ -1,13 +1,31 @@
-
-
-Strider is a file system navigator:
+**Strider** is a file system navigator:
 * to reduce keystrokes during navigation.
 * to remember and reuse the behavior and choices.
 * to be minimalistic until it's needed to do more.
-* to create paths without annoying asking.
+* to create new paths without annoying asking.
+
+Note! Project status: proof of concept, no guarantees.
 
 ## Install
-
+```xsh
+pip install git+https://github.com/anki-code/strider
+```
 
 ## Usage
+Run strider and start striding:
+```xsh
+strider
+```
+
+In xonsh shell you can load xontrib with `s` alias that allows to change directory using strider:
+```xsh
+xontrib load strider
+s
+```
+
+## Known issues
+
+### Tested only on Mac OS
+
+Current version of strider is using and testing on Mac OS. It will be good to test and fix for Linux and Windows.
 
