@@ -19,7 +19,7 @@ Run strider and start striding:
 strider
 ```
 
-In xonsh shell you can load xontrib with `s` alias that allows to change directory using strider:
+In the xonsh shell you can load xontrib with `s` alias that allows to change directory using strider:
 ```xsh
 xontrib load strider
 s
@@ -29,8 +29,8 @@ s
 
 Basic:
 
-* <kbd>←</kbd> = `cd ..` 
-* <kbd>→</kbd> = `cd <dir>`
+* <kbd>←</kbd> - `cd ..` .
+* <kbd>→</kbd> - `cd <dir>`.
 * <kbd>Space</kbd> - open menu.
 * <kbd>Enter</kbd> - open file or directory using OS associations.
 
