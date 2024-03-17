@@ -4,9 +4,11 @@
 * to be minimalistic until it's needed to do more.
 * to create new paths without annoying asking.
 
-## Note! Project status: proof of concept, no guarantees.
 
 ## Install
+
+**Note! Project status: proof of concept, no guarantees.**
+
 ```xsh
 pip install git+https://github.com/anki-code/strider
 ```
