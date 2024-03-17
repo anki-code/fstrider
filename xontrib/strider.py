@@ -4,4 +4,4 @@ import strider
 
 @aliases.register("s")
 def _strider(args):
-    strider.main()
+    strider.main(args)
