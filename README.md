@@ -38,7 +38,8 @@ Basic:
 Additional:
 
 * <kbd>Shift ~</kbd> - jump to the home directoy.
-* <kbd>Control J</kbd> - jump to path.
+* <kbd>Control j</kbd> - jump to path.
+* <kbd>Control d</kbd> - jump to directory from history.
 * <kbd>Control +</kbd> - copy path to the current directory.
 
 ## Known issues
