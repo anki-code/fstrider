@@ -9,7 +9,7 @@
 
 **Note before installation!**
 * Project status: proof of concept. No guarantees, use it carefully until you get 1.0.0 version.
-* Read the text below about using `/` when copying or moving.
+* Read the text below about using `/` when copying or moving file and directories.
 
 ```xsh
 pip install git+https://github.com/anki-code/strider
