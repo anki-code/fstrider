@@ -31,9 +31,9 @@ s
 
 Basic:
 
-* <kbd>Left</kbd> - `cd ..` .
-* <kbd>Right</kbd> - `cd <dir>`.
-* <kbd>Space</kbd> - open menu.
+* <kbd>Left</kbd> - move to parent directory.
+* <kbd>Right</kbd> - move to the selected directory.
+* <kbd>Space</kbd> - open menu for the current file or directory.
 * <kbd>Enter</kbd> - open file or directory using OS associations.
 * <kbd>Esc</kbd> - quit.
 
