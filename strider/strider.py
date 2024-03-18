@@ -307,7 +307,7 @@ class Strider:
         if self.current_path.is_dir() and self.env['os_path_change']:
             os.chdir(self.current_path)
         if update_list:
-            self.update_list(selected_by_value=selected_by_value, title_msg=None, file_msg=file_msg)
+            self.update_list(selected_by_value=selected_by_value, title_msg=title_msg, file_msg=file_msg)
 
     def do_open_with(self, path):
         """Show "Open with" menu."""
