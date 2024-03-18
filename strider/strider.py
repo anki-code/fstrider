@@ -465,10 +465,10 @@ class Strider:
         msg = ''
         if dp.is_dir():
             shutil.rmtree(dp)
-            msg = f'Deleted directory {dp.name}'
+            msg = f'Deleted directory {repr(dp.name)}'
         else:
             dp.unlink()
-            msg = f'Deleted file {dp.name}'
+            msg = f'Deleted file {repr(dp.name)}'
         self.move(dp.parent, title_msg=msg)
 
     def do_delete(self, filename: Path):
