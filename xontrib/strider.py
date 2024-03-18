@@ -1,7 +1,7 @@
 """Xontrib for Strider."""
 
-import strider
+import strider as _strider
 
 @aliases.register("s")
-def _strider(args):
-    strider.main(args)
+def _alias_strider(args):
+    _strider.main(args)
