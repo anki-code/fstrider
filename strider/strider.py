@@ -171,13 +171,12 @@ class Strider:
         def _key_jump(event):
             def callback(result_path, input_data):
                 if result_path:
-                    self.move(Path(result_path).expanduser().absolute())
-
+                    self.move(Path(result_path).expanduser().absolute(), title_msg='Jump')
             self.input_dialog(title='Jump', label_text='Jump to:', callback=callback)
 
         @radio_list.control.key_bindings.add("~")
         def _key_jump_home(event):
-            self.move(Path('~').expanduser())
+            self.move(Path('~').expanduser(), title_msg='Welcome home')
 
         @radio_list.control.key_bindings.add("+")
         def _key_copy_from_path(event):
@@ -372,7 +371,7 @@ class Strider:
         s = repr(s) if ' ' in s else s
         copy_to_clp(s)
         cp = self.current_path
-        self.move(path.parent, selected_by_value=path, file_msg={path: 'Path copied!'})
+        self.move(path.parent, selected_by_value=path, file_msg={path: 'Path copied'})
 
 
     def open_in_os_app(self, filename: Path, app_name: str = None):
@@ -422,7 +421,7 @@ class Strider:
         sp = Path(source_path)
         tp = Path(target_path)
         if tp.expanduser().absolute() == sp.expanduser().absolute():
-            self.move(tp.parent, selected_by_value=tp, file_msg={tp: f'Moving is not needed :)'})
+            self.move(tp.parent, selected_by_value=tp, file_msg={tp: f'Moving is not needed'})
             return
 
         copy_result = self.callback_copy(target_path, input_data)
@@ -450,24 +449,27 @@ class Strider:
             if dirname:
                 target_dir = basedir / dirname
                 target_dir.mkdir(parents=True, exist_ok=True)
-                self.move(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]))
+                self.move(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]), title_msg='Created')
         self.input_dialog(title='New directory', label_text=f'Create in {basedir}:', callback=callback)
 
 
     def do_create_this_dir(self, basedir: Path):
         """Doing "Create this directory"."""
         basedir.mkdir(parents=True, exist_ok=True)
-        self.move(basedir)
+        self.move(basedir, title_msg='Created')
 
 
     def callback_delete(self, delpath, input_data):
         """Callback to delete path."""
         dp = Path(delpath)
+        msg = ''
         if dp.is_dir():
             shutil.rmtree(dp)
+            msg = f'Deleted directory {dp.name}'
         else:
             dp.unlink()
-        self.move(dp.parent)
+            msg = f'Deleted file {dp.name}'
+        self.move(dp.parent, title_msg=msg)
 
     def do_delete(self, filename: Path):
         """Show menu to delete path."""
