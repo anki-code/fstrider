@@ -53,6 +53,11 @@ Strider was created to reduce keystrokes. So remember two things:
 * If you copy directory `/tmp/dir1` and the target path ends with `/` e.g. `/tmp/other/` then the `dir1` will be putted into `/tmp/other/dir`.
 * If you copy directory `/tmp/dir2` and the target path ends with directory name e.g. `/tmp/other` then the `dir2` will be merged with `/tmp/other`. Existing files will be overwritten.
 
+## Good to know
+
+* Copy the current path in MacOS Finder: <kbd>Option Command C</kbd>
+* Jump to path in MacOS Finder: <kbd>Command Shift G</kbd>
+
 ## Known issues
 
 ### Tested only on Mac OS
