@@ -398,7 +398,7 @@ class Strider:
                 if (exists := self.current_path.parent / new_name).exists():  # FEAT: overwrite check
                     raise Exception(f'Already exists: {exists}')
                 new_path = self.current_path.rename(self.current_path.parent / new_name).absolute()
-                self.move(new_path.parent, selected_by_value=new_path)
+                self.move(new_path.parent, selected_by_value=new_path, file_msg={new_path: f'Renamed from {repr(self.current_path.name)}'})
         self.input_dialog(title='Rename', label_text=f'New name:', callback=callback, text_area_text=self.current_path.name)
 
 
