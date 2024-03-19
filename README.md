@@ -69,11 +69,11 @@ Current version of strider is using and testing on Mac OS. It will be good to te
 Feel free to grab and implement. PR is welcome!
 
 ### Shell integration
-#### Xonsh
+#### Xonsh shell
 - Using xonsh shell history to jump into directories.
 - Run shell command in this directory.
-- Change shell current directory.
-  - Other shells support.
+#### Other shells support.
+- Change current directory.
 ### Navigation
 - Up key at first option moves cursor to end.
 - Add directory to list.
