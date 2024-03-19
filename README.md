@@ -7,9 +7,7 @@
 
 ## Install
 
-**Note before installation!**
-* Project status: proof of concept. No guarantees, use it carefully until you get 1.0.0 version.
-* Read the text below about using `/` when copying or moving file and directories.
+Before installation read the text below about using `/` when copying or moving file and directories.
 
 Install or update:
 
