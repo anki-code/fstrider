@@ -76,13 +76,12 @@ Feel free to grab and implement. PR is welcome!
 - Change current directory.
 ### Navigation
 - Up key at first option moves cursor to end.
-- Add directory to list.
 ### Dialog
-- Put cursor to the end of line.
+- Put cursor to the end of line
 - Enter-Esc alternative to Ok/Cancel buttons.
-- Autocomplete for paths in menu.
+- Autocomplete for paths in menu - the feature from prompt-toolkit.
   - Use path from clipboard.
-- Copying progress bar.
+- Copying progress bar or just the console log from `rsync`.
 ### List
 - Modes: short, full.
   - Show file chmod/chown in title.
