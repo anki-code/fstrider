@@ -7,7 +7,7 @@
 
 ## Install
 
-Before installation read the text below about using `/` when copying or moving file and directories.
+Before installation read the text below about using `/` when copying or moving files and directories.
 
 Install or update:
 
