@@ -64,62 +64,68 @@ Strider was created to reduce keystrokes. So remember two things:
 
 Current version of strider is using and testing on Mac OS. It will be good to test and fix for Linux and Windows.
 
-# Todo
-## Shell integration
-### Xonsh
+## Future features
+
+Feel free to grab and implement. PR is welcome!
+
+### Shell integration
+#### Xonsh
 - Using xonsh shell history to jump into directories.
 - Run shell command in this directory.
 - Change shell current directory.
   - Other shells support.
-## Navigation
+### Navigation
 - Up key at first option moves cursor to end.
 - Add directory to list.
-## Dialog
+### Dialog
 - Put cursor to the end of line.
 - Enter-Esc alternative to Ok/Cancel buttons.
 - Autocomplete for paths in menu.
   - Use path from clipboard.
 - Copying progress bar.
-## List
+### List
 - Modes: short, full.
   - Show file chmod/chown in title.
 - Sorting by size `sorted(glob.glob('*.png'), key=os.path.getsize)`.
 - Draggable items. `ls --hyperlink`
 - Fuzzy search.
-## Integration
+### Integration
 - "=" to move object from path to the current dir.
-## App association
+### App association
 - `.xonshrc` case in app_assoc.
 - Highlight known suffix from app_assoc.
 - Using $LS_COLORS and `dircolors` for color files.
-## Title
+### Title
 - Show what part of path is exist and what new.
 - Show chown/chmod if "Access denied".
-## Env options
+### Env options
 - The way to switch on/off env options.
 - Way to change key bindings.
-## Style
+### Style
 - Dark style.
-## Debug
+### Debug
 - Debug mode
 - Show errors like in case of exception.
-## Tech
+### Tech
 - Resolve '/tmp/../../'
 - Symlinks: copying, moving
 
-# Ideas
-## List
-### Fake files
+## Ideas
+
+Just ideas for future features.
+
+### List
+#### Fake files (items in the list)
 - Fake deleted file to show that this file was deleted.
 - Interstellar wormhole - path to another path added to this directory.
   - Read the path from files in this directory.
 - Gradient: by time, by size. Show old files with dark color. Show small files with dark color.
-## Integration
+### Integration
 - Catching pasting path from clipboard and ask actions: cd-ing, copy/move from, open.
 - Async update the list (#1)
-## Keys
+### Keys
 - Free keys to use: `/`, `-`.
 - Double Commander/Midnight Commander bindings: F3 read, F4 edit, F5 copy, F6 move, F7 rename, F8 delete, F10 quit.
 - VI-mode: bind keys like in vim.
-## AI
+### AI
 - Predict the next choice of path based on history and maybe files in dir.
