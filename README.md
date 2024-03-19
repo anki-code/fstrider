@@ -121,7 +121,7 @@ Just ideas for future features.
 - Gradient: by time, by size. Show old files with dark color. Show small files with dark color.
 ### Integration
 - Catching pasting path from clipboard and ask actions: cd-ing, copy/move from, open.
-- Async update the list (#1)
+- [Async update the list](https://github.com/anki-code/strider/issues/1)
 ### Keys
 - Free keys to use: `/`, `-`.
 - Double Commander/Midnight Commander bindings: F3 read, F4 edit, F5 copy, F6 move, F7 rename, F8 delete, F10 quit.
