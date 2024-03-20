@@ -14,6 +14,7 @@ from prompt_toolkit.layout.containers import (
 )
 from prompt_toolkit.layout.dimension import Dimension as D
 from prompt_toolkit.key_binding.key_bindings import KeyBindings
+from prompt_toolkit.filters import Condition
 
 class TextInputDialog:
     def __init__(self, title="", label_text="", text_area_text='', completer=None):
@@ -35,9 +36,16 @@ class TextInputDialog:
             multiline=False,
             width=D(preferred=40),
             accept_handler=accept_text,
-            text=text_area_text
+            text=text_area_text,
+            focus_on_click=True
         )
         self.text_area.control.key_bindings = KeyBindings()
+
+        # Select line to easy press delete for pasting new path
+        self.text_area.buffer._set_cursor_position(0)
+        self.text_area.buffer.start_selection()
+        self.text_area.buffer.selection_state.enter_shift_mode()
+        self.text_area.buffer._set_cursor_position(len(text_area_text))
 
         ok_button = Button(text="OK", handler=accept)
         cancel_button = Button(text="Cancel", handler=cancel)
@@ -45,8 +53,17 @@ class TextInputDialog:
         @self.text_area.control.key_bindings.add("escape")
         @ok_button.control.key_bindings.add("escape")
         @cancel_button.control.key_bindings.add("escape")
-        def _key_exit(event):
+        def _key_close_dialog(event):
             self.future.set_result(None)
+
+        @Condition
+        def is_select_mode() -> bool:
+            return self.text_area.buffer.selection_state is not None
+
+        @self.text_area.control.key_bindings.add("enter", filter=is_select_mode)
+        def _key_stop_typing(event):
+            # Stop selection before going forward.
+            self.text_area.buffer.exit_selection()
 
         self.dialog = Dialog(
             title=title,

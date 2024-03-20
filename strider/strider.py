@@ -203,11 +203,6 @@ class Strider:
             event.app.exit()
 
         if self.env['keys_midnight_commander']:
-            @radio_list.control.key_bindings.add("f2")
-            def _key_copy_path(event):
-                radio_list._handle_enter()
-                self.do_open_with(radio_list.current_value)
-
             @radio_list.control.key_bindings.add("f5")
             def _key_copy_path(event):
                 radio_list._handle_enter()

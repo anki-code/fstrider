@@ -72,11 +72,11 @@ Feel free to grab and implement. PR is welcome!
 ### Navigation
 - Up key at first option moves cursor to end.
 ### Dialog
-- Put cursor to the end of line
-- Enter-Esc alternative to Ok/Cancel buttons.
 - Autocomplete for paths in menu - the feature from prompt-toolkit.
-  - Use path from clipboard.
 - Copying progress bar or just the console log from `rsync`.
+- Jump
+  - Use path from clipboard e.g. `text_area.buffer.paste_clipboard_data`.
+  - Use directories from history.
 ### List
 - Modes: short, full.
   - Show file chmod/chown in title.
