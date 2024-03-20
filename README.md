@@ -7,7 +7,7 @@ If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/twe
 </p>
 
 
-**Strider** is a terminal file system navigator:
+**Strider** is:
 * to reduce keystrokes during navigation.
 * to remember and reuse the behavior and choices.
 * to be minimalistic until it's needed to do more.
