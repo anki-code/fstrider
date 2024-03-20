@@ -44,6 +44,15 @@ Additional:
 * <kbd>Control d</kbd> - jump to directory from history.
 * <kbd>Control +</kbd> - copy path to the current directory.
 
+Midnight Commander bindings:
+
+* <kbd>F5</kbd> - copy.
+* <kbd>F6</kbd> - move.
+* <kbd>F7</kbd> - rename.
+* <kbd>F8</kbd> - delete.
+* <kbd>F10</kbd> - quit.
+* <kbd>F12</kbd> - open with.
+
 ### Using `/` when copying or moving.
 
 Strider was created to reduce keystrokes. So remember two things:
@@ -124,7 +133,6 @@ Just ideas for future features.
   - The way to setup strider for special needs: colors, menus, hotkeys.
 ### Keys
 - Free keys to use: `/`, `-`.
-- Double Commander/Midnight Commander bindings: F3 read, F4 edit, F5 copy, F6 move, F7 rename, F8 delete, F10 quit.
 - VI-mode: bind keys like in vim.
 ### AI
 - Predict the next choice of path based on history and maybe files in dir.
