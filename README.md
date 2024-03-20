@@ -1,4 +1,13 @@
-**Strider** is a file system navigator:
+<p align="center">
+<b>Strider</b> is an intuitive and fast file system navigator for terminal.
+</p>
+
+<p align="center">  
+If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20file%20system%20navigator!&url=https://github.com/anki-code/strider" target="_blank">tweet</a>.
+</p>
+
+
+**Strider** is a terminal file system navigator:
 * to reduce keystrokes during navigation.
 * to remember and reuse the behavior and choices.
 * to be minimalistic until it's needed to do more.
