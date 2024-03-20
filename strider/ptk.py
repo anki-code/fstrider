@@ -13,7 +13,7 @@ from prompt_toolkit.layout.containers import (
     HSplit,
 )
 from prompt_toolkit.layout.dimension import Dimension as D
-
+from prompt_toolkit.key_binding.key_bindings import KeyBindings
 
 class TextInputDialog:
     def __init__(self, title="", label_text="", text_area_text='', completer=None):
@@ -37,9 +37,16 @@ class TextInputDialog:
             accept_handler=accept_text,
             text=text_area_text
         )
+        self.text_area.control.key_bindings = KeyBindings()
 
         ok_button = Button(text="OK", handler=accept)
         cancel_button = Button(text="Cancel", handler=cancel)
+
+        @self.text_area.control.key_bindings.add("escape")
+        @ok_button.control.key_bindings.add("escape")
+        @cancel_button.control.key_bindings.add("escape")
+        def _key_exit(event):
+            self.future.set_result(None)
 
         self.dialog = Dialog(
             title=title,

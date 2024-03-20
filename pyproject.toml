@@ -1,6 +1,6 @@
 [project]
 name = "strider"
-version = "0.1.8"
+version = "0.1.9"
 license = {file = "LICENSE"}
 description = "Library of the useful macroses for the xonsh shell."
 classifiers = [
