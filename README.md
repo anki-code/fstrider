@@ -68,7 +68,6 @@ Current version of strider is using and testing on Mac OS. It will be good to te
 
 Feel free to grab and implement. PR is welcome!
 ### Configuration
-- The way to change key bindings.
 - Load env config from file.
 ### Navigation
 - Up key at first option moves cursor to end.
@@ -98,6 +97,10 @@ Feel free to grab and implement. PR is welcome!
 - Way to change key bindings.
 ### Style
 - Dark style.
+### Key bindings
+- The way to change key bindings.
+- VI mode.
+- Emacs mode.
 ### Debug
 - Debug mode
 - Show errors like in case of exception.
