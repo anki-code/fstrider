@@ -34,7 +34,8 @@ class Strider:
     env = {
         'os_path_change': True,
         'show_symlink_paths': True,
-        'app_associations_save_file': False
+        'app_associations_save_file': False,
+        'keys_midnight_commander': True
     }
 
     def __init__(self, current_path: Path = None):
@@ -201,6 +202,41 @@ class Strider:
         def _key_exit(event):
             event.app.exit()
 
+        if self.env['keys_midnight_commander']:
+            @radio_list.control.key_bindings.add("f2")
+            def _key_copy_path(event):
+                radio_list._handle_enter()
+                self.do_open_with(radio_list.current_value)
+
+            @radio_list.control.key_bindings.add("f5")
+            def _key_copy_path(event):
+                radio_list._handle_enter()
+                self.do_copy(radio_list.current_value)
+
+            @radio_list.control.key_bindings.add("f6")
+            def _key_copy_path(event):
+                radio_list._handle_enter()
+                self.do_move(radio_list.current_value)
+
+            @radio_list.control.key_bindings.add("f8")
+            def _key_copy_path(event):
+                radio_list._handle_enter()
+                self.do_delete(radio_list.current_value)
+
+            @radio_list.control.key_bindings.add("f7")
+            def _key_copy_path(event):
+                radio_list._handle_enter()
+                self.do_create_dir(self.current_path)
+
+            @radio_list.control.key_bindings.add("f10")
+            def _key_exit(event):
+                event.app.exit()
+
+            @radio_list.control.key_bindings.add("f12")
+            def _key_exit(event):
+                radio_list._handle_enter()
+                self.do_open_with(radio_list.current_value)
+
         return radio_list
 
 
@@ -309,18 +345,19 @@ class Strider:
         if update_list:
             self.update_list(selected_by_value=selected_by_value, title_msg=title_msg, file_msg=file_msg)
 
-    def do_open_with(self, path):
+    def do_open_with(self, path: Path = None):
         """Show "Open with" menu."""
         apps = get_os_applications()
-        self.set_title(self.current_path, msg='Open with')
+        p = path if path else self.current_path
+        self.move(p, title_msg='Open with')
         self.list.values = [(open_in_os, 'OS associated')] + [(functools.partial(self.open_in_os_app, app_name=a), a) for a in apps]
 
         self.list._selected_index = 0
         preselect_app = None
-        if str(self.current_path) in self.app_associations:
-            preselect_app = self.app_associations[str(self.current_path)]
-        elif self.current_path.suffix in self.app_associations:
-            preselect_app = self.app_associations[self.current_path.suffix]
+        if str(p) in self.app_associations:
+            preselect_app = self.app_associations[str(p)]
+        elif p.suffix in self.app_associations:
+            preselect_app = self.app_associations[p.suffix]
 
         if preselect_app in apps:
             for i, v in enumerate(self.list.values):
@@ -450,7 +487,7 @@ class Strider:
                 target_dir = basedir / dirname
                 target_dir.mkdir(parents=True, exist_ok=True)
                 self.move(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]), title_msg='Created')
-        self.input_dialog(title='New directory', label_text=f'Create in {basedir}:', callback=callback)
+        self.input_dialog(title='New directory', label_text=f'Create dir in {basedir}:', callback=callback)
 
 
     def do_create_this_dir(self, basedir: Path):
