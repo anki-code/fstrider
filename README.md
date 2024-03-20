@@ -103,8 +103,10 @@ Feel free to grab and implement. PR is welcome!
 - Emacs mode.
 ### Debug
 - Debug mode
-- Show errors like in case of exception.
 ### Tech
+- Errors processing
+  - Show errors like in case of exception.
+  - Process `File exists` error.
 - Resolve `/tmp/../../`.
 - Symlinks: copying, moving
 ### Shell integration
