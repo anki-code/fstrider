@@ -113,6 +113,7 @@ Feel free to grab and implement. PR is welcome!
 #### Xonsh shell
 - Using xonsh shell history to jump into directories.
 - Run shell command in this directory.
+   - Crazy: use xonsh prompt as a prompt for ptk `TextArea`
 #### Other shells support.
 - Change current directory.
 
