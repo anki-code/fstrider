@@ -27,7 +27,7 @@ xontrib load strider
 s
 ```
 
-### Keys
+### Key bindings
 
 Basic:
 
@@ -74,13 +74,9 @@ Current version of strider is using and testing on Mac OS. It will be good to te
 ## Future features
 
 Feel free to grab and implement. PR is welcome!
-
-### Shell integration
-#### Xonsh shell
-- Using xonsh shell history to jump into directories.
-- Run shell command in this directory.
-#### Other shells support.
-- Change current directory.
+### Configuration
+- The way to change key bindings.
+- Load env config from file.
 ### Navigation
 - Up key at first option moves cursor to end.
 ### Dialog
@@ -115,6 +111,12 @@ Feel free to grab and implement. PR is welcome!
 ### Tech
 - Resolve '/tmp/../../'
 - Symlinks: copying, moving
+### Shell integration
+#### Xonsh shell
+- Using xonsh shell history to jump into directories.
+- Run shell command in this directory.
+#### Other shells support.
+- Change current directory.
 
 ## Ideas
 
