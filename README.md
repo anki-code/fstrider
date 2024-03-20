@@ -105,7 +105,7 @@ Feel free to grab and implement. PR is welcome!
 - Debug mode
 - Show errors like in case of exception.
 ### Tech
-- Resolve '/tmp/../../'
+- Resolve `/tmp/../../`.
 - Symlinks: copying, moving
 ### Shell integration
 #### Xonsh shell
