@@ -53,7 +53,7 @@ def copy_path(source_path: Path, target_path: str):
             move = {
                 'p': tp.parent,
                 'selected_by_value': tp,
-                'file_msg': {tp: 'Copying is not needed :)'}
+                'file_msg': {tp: 'Copying is not needed'}
             }
         else:
             if tp.exists():
@@ -81,7 +81,7 @@ def copy_path(source_path: Path, target_path: str):
             move = {
                 'p': tp.parent,
                 'selected_by_value': tp,
-                'file_msg': {tp: f'Copying is not needed :)'}
+                'file_msg': {tp: f'Copying is not needed'}
             }
             result = 'nocopy'
         else:

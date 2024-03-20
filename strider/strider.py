@@ -52,12 +52,12 @@ class Strider:
 
         self.bindings = KeyBindings()
 
-        self.stride()
+        self.run()
 
         Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
 
-    def stride(self):
+    def run(self):
         """Start striding."""
         first_selected = None
         if not self.current_path.is_dir():
@@ -137,14 +137,14 @@ class Strider:
 
         @radio_list.control.key_bindings.add("left")
         def _list_left(event):
-            self.move(self.current_path.parent)
+            self.stride(self.current_path.parent)
 
         @radio_list.control.key_bindings.add("enter")
         def _list_enter(event):
             radio_list._handle_enter()
             selected_item = radio_list.current_value
             if type(selected_item) is pathlib.PosixPath:
-                self.move(selected_by_value=radio_list.current_value, file_msg={radio_list.current_value: 'Open with OS'})
+                self.stride(selected_by_value=radio_list.current_value, file_msg={radio_list.current_value: 'Open with OS'})
                 open_in_os(radio_list.current_value)
             elif callable(selected_item):
                 selected_item(self.current_path)
@@ -154,7 +154,7 @@ class Strider:
             radio_list._handle_enter()
             cv = radio_list.current_value
             if type(cv) is pathlib.PosixPath and cv.is_dir():
-                self.move(radio_list.current_value)
+                self.stride(radio_list.current_value)
             else:
                 # open_in_terminal(radio_list.current_value)
                 pass
@@ -163,7 +163,7 @@ class Strider:
         def _list_space(event):
             radio_list._handle_enter()
             if type(radio_list.current_value) is pathlib.PosixPath:
-                self.move(radio_list.current_value, title_msg='Actions', update_list=False)
+                self.stride(radio_list.current_value, title_msg='Actions', update_list=False)
                 radio_list.values = self.list_file_actions(radio_list.current_value)
                 radio_list._selected_index = 0
                 self.history[str(radio_list.current_value.parent)] = str(radio_list.current_value)
@@ -172,19 +172,19 @@ class Strider:
         def _key_jump(event):
             def callback(result_path, input_data):
                 if result_path:
-                    self.move(Path(result_path).expanduser().absolute(), title_msg='Jump')
+                    self.stride(Path(result_path).expanduser().absolute(), title_msg='Jump')
             self.input_dialog(title='Jump', label_text='Jump to:', callback=callback)
 
         @radio_list.control.key_bindings.add("~")
         def _key_jump_home(event):
-            self.move(Path('~').expanduser(), title_msg='Welcome home')
+            self.stride(Path('~').expanduser(), title_msg='Welcome home')
 
         @radio_list.control.key_bindings.add("+")
         def _key_copy_from_path(event):
             def callback(source_path: str, input_data: dict):
                 r = copy_path(Path(source_path), str(input_data['target_path'])+'/')
-                self.move(r['move']['p'], selected_by_value=r['move']['selected_by_value'],
-                          file_msg=r['move']['file_msg'])
+                self.stride(r['move']['p'], selected_by_value=r['move']['selected_by_value'],
+                            file_msg=r['move']['file_msg'], title_msg='Copy')
                 return r['result']
             self.input_dialog(title='Copy from', label_text='Copy here this:', callback=callback, input_data={'target_path': self.current_path})
 
@@ -322,9 +322,9 @@ class Strider:
         if selected_by_value:
             self.list._selected_index = self.get_index_in_values(self.list.values, payload=selected_by_value)
 
-    def move(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None, update_list=True):
+    def stride(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None, update_list=True):
         """
-        Move to the path.
+        Stride to the path.
         :param p:
         :param selected_by_value:
         :param title_msg:
@@ -344,7 +344,7 @@ class Strider:
         """Show "Open with" menu."""
         apps = get_os_applications()
         p = path if path else self.current_path
-        self.move(p, title_msg='Open with')
+        self.stride(p, title_msg='Open with')
         self.list.values = [(open_in_os, 'OS associated')] + [(functools.partial(self.open_in_os_app, app_name=a), a) for a in apps]
 
         self.list._selected_index = 0
@@ -403,7 +403,7 @@ class Strider:
         s = repr(s) if ' ' in s else s
         copy_to_clp(s)
         cp = self.current_path
-        self.move(path.parent, selected_by_value=path, file_msg={path: 'Path copied'})
+        self.stride(path.parent, selected_by_value=path, file_msg={path: 'Path copied'})
 
 
     def open_in_os_app(self, filename: Path, app_name: str = None):
@@ -429,7 +429,7 @@ class Strider:
                 if (exists := self.current_path.parent / new_name).exists():  # FEAT: overwrite check
                     raise Exception(f'Already exists: {exists}')
                 new_path = self.current_path.rename(self.current_path.parent / new_name).absolute()
-                self.move(new_path.parent, selected_by_value=new_path, file_msg={new_path: f'Renamed from {repr(self.current_path.name)}'})
+                self.stride(new_path.parent, selected_by_value=new_path, file_msg={new_path: f'Renamed from {repr(self.current_path.name)}'})
         self.input_dialog(title='Rename', label_text=f'New name:', callback=callback, text_area_text=self.current_path.name)
 
 
@@ -438,7 +438,7 @@ class Strider:
     def callback_copy(self, target_path: str, input_data: dict):
         """Callback to doing copy path."""
         r = copy_path(input_data['source_path'], target_path)
-        self.move(r['move']['p'], selected_by_value=r['move']['selected_by_value'], file_msg=r['move']['file_msg'])
+        self.stride(r['move']['p'], selected_by_value=r['move']['selected_by_value'], file_msg=r['move']['file_msg'])
         return r['result']
 
     def do_copy(self, source_path: Path):
@@ -453,7 +453,7 @@ class Strider:
         sp = Path(source_path)
         tp = Path(target_path)
         if tp.expanduser().absolute() == sp.expanduser().absolute():
-            self.move(tp.parent, selected_by_value=tp, file_msg={tp: f'Moving is not needed'})
+            self.stride(tp.parent, selected_by_value=tp, file_msg={tp: f'Moving is not needed'})
             return
 
         copy_result = self.callback_copy(target_path, input_data)
@@ -466,7 +466,7 @@ class Strider:
 
         mv = tp if target_path.endswith('/') else tp.parent
         selected = (tp/sp.name) if target_path.endswith('/') else tp
-        self.move(mv, selected_by_value=selected, file_msg={selected: f'{msg} {source_path}'})
+        self.stride(mv, selected_by_value=selected, file_msg={selected: f'{msg} {source_path}'})
 
     def do_move(self, source_path: Path):
         """Doing move path."""
@@ -481,14 +481,14 @@ class Strider:
             if dirname:
                 target_dir = basedir / dirname
                 target_dir.mkdir(parents=True, exist_ok=True)
-                self.move(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]), title_msg='Created')
+                self.stride(target_dir, selected_by_value=(basedir / Path(dirname).parts[0]), title_msg='Created')
         self.input_dialog(title='New directory', label_text=f'Create dir in {basedir}:', callback=callback)
 
 
     def do_create_this_dir(self, basedir: Path):
         """Doing "Create this directory"."""
         basedir.mkdir(parents=True, exist_ok=True)
-        self.move(basedir, title_msg='Created')
+        self.stride(basedir, title_msg='Created')
 
 
     def callback_delete(self, delpath, input_data):
@@ -501,7 +501,7 @@ class Strider:
         else:
             dp.unlink()
             msg = f'Deleted file {repr(dp.name)}'
-        self.move(dp.parent, title_msg=msg)
+        self.stride(dp.parent, title_msg=msg)
 
     def do_delete(self, filename: Path):
         """Show menu to delete path."""
