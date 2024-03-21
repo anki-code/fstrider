@@ -134,6 +134,12 @@ Associations
     Using $LS_COLORS and `dircolors` for color files.    
 ```
 
+### v0.6.0
+```
+List
+    Improve speed of list on big amount of items - 10k+
+```
+
 ### Waiting for community
 
 ```
