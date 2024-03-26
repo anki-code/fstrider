@@ -1,5 +1,5 @@
 [project]
-name = "strider"
+name = "fstrider"
 version = "0.1.12"
 license = {file = "LICENSE"}
 description = "Library of the useful macroses for the xonsh shell."
@@ -22,10 +22,10 @@ file = "README.md"
 content-type = "text/markdown"
 
 [project.urls]
-Homepage = "https://github.com/anki-code/strider"
-Documentation = "https://github.com/xonsh/strider/blob/master/README.md"
-Code = "https://github.com/xonsh/strider"
-"Issue tracker" = "https://github.com/xonsh/strider/issues"
+Homepage = "https://github.com/anki-code/fstrider"
+Documentation = "https://github.com/xonsh/fstrider/blob/master/README.md"
+Code = "https://github.com/xonsh/fstrider"
+"Issue tracker" = "https://github.com/xonsh/fstrider/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
@@ -39,12 +39,12 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["strider", "xontrib"]
+packages = ["fstrider", "xontrib"]
 include-package-data = true
-script-files = ["strider/strider"]
+script-files = ["fstrider/fstrider"]
 
 [tool.poetry.scripts]
-strider = "strider.__init__:main"
+fstrider = "fstrider.__init__:main"
 
 
 [tool.isort]

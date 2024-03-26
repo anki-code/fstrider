@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import strider
+import fstrider
 
 if __name__ == "__main__":
-    strider.main()
+    fstrider.main()

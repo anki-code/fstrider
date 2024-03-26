@@ -1,13 +1,13 @@
 <p align="center">
-<b>Strider</b> is an intuitive and fast file system navigator for terminal.
+<b>fStrider</b> is an intuitive and fast file system navigator for terminal.
 </p>
 
 <p align="center">  
-If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20file%20system%20navigator!&url=https://github.com/anki-code/strider" target="_blank">tweet</a>.
+If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20file%20system%20navigator!&url=https://github.com/anki-code/fstrider" target="_blank">tweet</a>.
 </p>
 
 
-**Strider** is:
+**fStrider** is:
 * to reduce keystrokes during navigation.
 * to remember and reuse the behavior and choices.
 * to be minimalistic until it's needed to do more.
@@ -21,18 +21,18 @@ Before installation read the text below about using `/` when copying or moving f
 Install or update:
 
 ```xsh
-pip install -U git+https://github.com/anki-code/strider
+pip install -U git+https://github.com/anki-code/fstrider
 ```
 
 ## Usage
-Run strider and start striding:
+Run fstrider and start striding:
 ```xsh
-strider
+fstrider
 ```
 
-In the xonsh shell you can load xontrib with `s` alias that works fast and allows to change directory using strider:
+In the xonsh shell you can load xontrib with `s` alias that works fast and allows to change directory using fstrider:
 ```xsh
-xontrib load strider
+xontrib load fstrider
 s
 ```
 
@@ -57,7 +57,7 @@ Midnight Commander bindings: <kbd>F5</kbd> copy, <kbd>F6</kbd> move, <kbd>F7</kb
 
 ### Using `/` when copying or moving.
 
-Strider was created to reduce keystrokes. So remember two things:
+fStrider was created to reduce keystrokes. So remember two things:
 * Any new path will be created automatically. When you copy the file `example.txt` to `/tmp/some/new/path/` the path `/tmp/some/new/path/` will be created automatically.
 * If you copy directory `/tmp/dir1` and the target path ends with `/` e.g. `/tmp/other/` then the `dir1` will be putted into `/tmp/other/dir`.
 * If you copy directory `/tmp/dir2` and the target path ends with directory name e.g. `/tmp/other` then the `dir2` will be merged with `/tmp/other`. Existing files will be overwritten.
@@ -71,7 +71,7 @@ Strider was created to reduce keystrokes. So remember two things:
 
 ### Tested only on Mac OS
 
-Current version of strider is using and testing on Mac OS. It will be good to test and fix for Linux and Windows.
+Current version of fstrider is using and testing on Mac OS. It will be good to test and fix for Linux and Windows.
 
 ## Roadmap
 
@@ -164,9 +164,9 @@ List
     Colors and gradient: by time, by size. Show old files with dark color. Show small files with dark color.
 Integration
     Catching pasting path from clipboard and ask actions: cd-ing, copy/move from, open.
-    Async update the list (https://github.com/anki-code/strider/issues/1)
-    Using strider for anything e.g. striding around aws s3 bucket, ssh host.
-        The way to setup strider for special needs: colors, menus, hotkeys.
+    Async update the list (https://github.com/anki-code/fstrider/issues/1)
+    Using fstrider for anything e.g. striding around aws s3 bucket, ssh host.
+        The way to setup fstrider for special needs: colors, menus, hotkeys.
 Keys
     Free keys to use: `/`, `-`.
     

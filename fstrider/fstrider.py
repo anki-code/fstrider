@@ -1,4 +1,4 @@
-"""Strider"""
+"""fStrider"""
 
 import json
 import os
@@ -21,14 +21,14 @@ from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.key_bindings import KeyBindings, merge_key_bindings
 from prompt_toolkit.layout.containers import Float, HSplit
 
-from strider.ptk import TextInputDialog
-from strider.clipboard import copy_to_clp
-from strider.os import open_in_os, get_os_applications, load_app_associations
-from strider.fs import access_type, copy_path
+from fstrider.ptk import TextInputDialog
+from fstrider.clipboard import copy_to_clp
+from fstrider.os import open_in_os, get_os_applications, load_app_associations
+from fstrider.fs import access_type, copy_path
 
 
-class Strider:
-    """Strider"""
+class fStrider:
+    """fStrider"""
 
     history = {}
     env = {
@@ -39,7 +39,7 @@ class Strider:
     }
 
     def __init__(self, current_path: Path = None):
-        self.title = Label('Welcome to Strider!')
+        self.title = Label('Welcome to fStrider!')
 
         current_path = '.' if current_path is None else current_path
         self.current_path = Path(current_path).absolute()
