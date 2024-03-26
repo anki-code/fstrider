@@ -172,7 +172,11 @@ class Strider:
         def _key_jump(event):
             def callback(result_path, input_data):
                 if result_path:
-                    self.stride(Path(result_path).expanduser().absolute(), title_msg='Jump')
+                    p = Path(result_path).expanduser().absolute()
+                    if p.is_dir():
+                        self.stride(p, title_msg='Jump')
+                    else:
+                        self.stride(p.parent, title_msg='Jump', file_msg={p: 'Jump'})
             self.input_dialog(title='Jump', label_text='Jump to:', callback=callback)
 
         @radio_list.control.key_bindings.add("~")
