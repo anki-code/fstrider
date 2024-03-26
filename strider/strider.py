@@ -176,7 +176,7 @@ class Strider:
                     if p.is_dir():
                         self.stride(p, title_msg='Jump')
                     else:
-                        self.stride(p.parent, title_msg='Jump', file_msg={p: 'Jump'})
+                        self.stride(p.parent, title_msg='Jump', file_msg={p: 'Jump'}, selected_by_value=p)
             self.input_dialog(title='Jump', label_text='Jump to:', callback=callback)
 
         @radio_list.control.key_bindings.add("~")
