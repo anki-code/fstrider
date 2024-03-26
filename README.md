@@ -33,7 +33,7 @@ fstrider
 In the xonsh shell you can load xontrib with `s` alias that works fast and allows to change directory using fstrider:
 ```xsh
 xontrib load fstrider
-s
+fs
 ```
 
 ### Key bindings
