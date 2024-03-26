@@ -30,7 +30,6 @@ from fstrider.fs import access_type, copy_path
 class fStrider:
     """fStrider"""
 
-    history = {}
     env = {
         'os_path_change': True,
         'show_symlink_paths': True,
@@ -40,6 +39,7 @@ class fStrider:
 
     def __init__(self, current_path: Path = None):
         self.title = Label('Welcome to fStrider!')
+        self.history = []
 
         current_path = '.' if current_path is None else current_path
         self.current_path = Path(current_path).absolute()
@@ -59,10 +59,11 @@ class fStrider:
 
     def run(self):
         """Start striding."""
+        self.history_append(self.current_path)
+
         first_selected = None
         if not self.current_path.is_dir():
             first_selected = self.current_path
-            self.history[str(self.current_path.parent)] = str(self.current_path)
             self.current_path = self.current_path.parent
         self.update_list(selected_by_value=first_selected, file_msg={first_selected: "I'm here!"})
 
@@ -104,6 +105,10 @@ class fStrider:
 
         return style
 
+    @staticmethod
+    def format_path_accent(p : Path, color='grey'):
+        return f'<style fg="{color}">' + (html.escape(str(p.parent)) if str(p.parent) != '/' else '') \
+                + '/' + f'</style><style fg="{color}"><b>' + html.escape(p.name) + '</b></style>'
 
     def set_title(self, p: Path, msg=None):
         """Set the main title."""
@@ -117,9 +122,7 @@ class fStrider:
         else:
             color = 'orange'
 
-
-        txt = f'<style fg="{color}">' + (html.escape(str(p.parent)) if str(p.parent) != '/' else '') \
-                + '/' + f'</style><style fg="{color}"><b>' + html.escape(p.name) + '</b></style>'
+        txt = self.format_path_accent(p, color)
 
         if msg:
             txt += f'<style fg="grey"> - {html.escape(msg)}</style>'
@@ -166,7 +169,7 @@ class fStrider:
                 self.stride(radio_list.current_value, title_msg='Actions', update_list=False)
                 radio_list.values = self.list_file_actions(radio_list.current_value)
                 radio_list._selected_index = 0
-                self.history[str(radio_list.current_value.parent)] = str(radio_list.current_value)
+                self.history_append(radio_list.current_value)
 
         @radio_list.control.key_bindings.add("c-j")
         def _key_jump(event):
@@ -192,10 +195,10 @@ class fStrider:
                 return r['result']
             self.input_dialog(title='Copy from', label_text='Copy here this:', callback=callback, input_data={'target_path': self.current_path})
 
-        @radio_list.control.key_bindings.add("c-d")
+        @radio_list.control.key_bindings.add("c-h")
         def _key_jump_to_directory(event):
             radio_list._selected_index = 0
-            radio_list.values = [(Path(p), p) for p in self.history]
+            radio_list.values = [(Path(p), HTML(self.format_path_accent(p))) for p in self.history][:100]
             self.set_title(self.current_path, msg='History')
 
         @radio_list.control.key_bindings.add("c-c")
@@ -258,16 +261,19 @@ class fStrider:
                 return num
         return default_index
 
+    def history_append(self, path: Path):
+        if self.history and self.history[0] == path.absolute():
+            return
+        self.history.insert(0, path)
+
     def get_list_values(self, file_msg : dict = None):
         """Get the list of files for the main list."""
         pwd = self.current_path
-        pwds = str(pwd)
         dirs = []
         files = []
         values = []
 
-        if str(pwd.parent) != pwds:
-            self.history[str(pwd.parent)] = pwds
+        self.history_append(pwd)
 
         if 'noaccess' in access_type(pwd):
             return {
@@ -304,8 +310,15 @@ class fStrider:
         history_index = 0
         if not values:
             values = [(pwd, HTML(f'<style fg="grey"><b>.</b></style>'))]
-        elif pwds in self.history:
-            history_index = self.get_index_in_values(values, payload=self.history[pwds])
+        else:
+            # FEAT: optimize
+            hist_path = None
+            for hp in self.history:
+                if hp.parent == pwd and hp != Path('/'):
+                    hist_path = hp
+                    break
+            if hist_path:
+                history_index = self.get_index_in_values(values, payload=hist_path)
 
         return {
             'values': values,
