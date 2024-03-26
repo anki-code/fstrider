@@ -94,6 +94,10 @@ Tech
     
 Style
     Grey style for copy/move and red style for delete dialogue. 
+    
+Navigation
+    Fix left key when go from history.    
+    Fix right key when go to file from history.
 ```
 
 ### v0.3.0
