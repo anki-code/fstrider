@@ -21,7 +21,7 @@ Before installation read the text below about using `/` when copying or moving f
 Install or update:
 
 ```xsh
-pip install -U fstrider
+pip install fstrider
 ```
 
 ## Usage
