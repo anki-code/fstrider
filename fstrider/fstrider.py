@@ -1,4 +1,4 @@
-"""fStrider"""
+"""fstrider"""
 
 import json
 import os
@@ -27,8 +27,8 @@ from fstrider.os import open_in_os, get_os_applications, load_app_associations
 from fstrider.fs import access_type, copy_path
 
 
-class fStrider:
-    """fStrider"""
+class fstrider:
+    """fstrider"""
 
     env = {
         'os_path_change': True,
@@ -38,7 +38,7 @@ class fStrider:
     }
 
     def __init__(self, current_path: Path = None):
-        self.title = Label('Welcome to fStrider!')
+        self.title = Label('Welcome to fstrider!')
         self.history = []
 
         current_path = '.' if current_path is None else current_path

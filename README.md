@@ -1,5 +1,5 @@
 <p align="center">
-<b>fStrider</b> is an intuitive and fast file system navigator for terminal.
+<b>fstrider</b> is an intuitive and fast file system navigator for terminal.
 </p>
 
 <p align="center">  
@@ -7,7 +7,7 @@ If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/twe
 </p>
 
 
-**fStrider** is:
+**fstrider** is:
 * to reduce keystrokes during navigation.
 * to remember and reuse the behavior and choices.
 * to be minimalistic until it's needed to do more.
@@ -57,7 +57,7 @@ Midnight Commander bindings: <kbd>F5</kbd> copy, <kbd>F6</kbd> move, <kbd>F7</kb
 
 ### Using `/` when copying or moving.
 
-fStrider was created to reduce keystrokes. So remember two things:
+fstrider was created to reduce keystrokes. So remember two things:
 * Any new path will be created automatically. When you copy the file `example.txt` to `/tmp/some/new/path/` the path `/tmp/some/new/path/` will be created automatically.
 * If you copy directory `/tmp/dir1` and the target path ends with `/` e.g. `/tmp/other/` then the `dir1` will be putted into `/tmp/other/dir`.
 * If you copy directory `/tmp/dir2` and the target path ends with directory name e.g. `/tmp/other` then the `dir2` will be merged with `/tmp/other`. Existing files will be overwritten.

@@ -1,7 +1,7 @@
 import sys
 import argparse
 
-from fstrider.fstrider import fStrider
+from fstrider.fstrider import fstrider
 
 
 def d2F0Y2ggLW4uMSBzdHJpZGVyIC8vLw(path):
@@ -16,13 +16,13 @@ def d2F0Y2ggLW4uMSBzdHJpZGVyIC8vLw(path):
 
 def main(args=None) -> None:
 
-    argp = argparse.ArgumentParser(description=f"fStrider.")
+    argp = argparse.ArgumentParser(description=f"fstrider")
     argp.add_argument('path', nargs='?', default='.', help="Starting path.")
     args = argp.parse_args(args)
 
     d2F0Y2ggLW4uMSBzdHJpZGVyIC8vLw(args.path)
 
-    fStrider(args.path)
+    fstrider(args.path)
 
 
 if __name__ == "__main__":
