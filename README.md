@@ -99,6 +99,9 @@ Style
 ### v0.3.0
 
 ```
+Navigation
+    Go back to previous directory after moving or copying.
+    
 List
     Sorting by size/date `sorted(glob.glob('*.png'), key=os.path.getsize)`.
     Modes: short, full (chmod/chown/date). 
