@@ -22,6 +22,7 @@ Install or update:
 
 ```xsh
 pip install fstrider
+# OR: pip install -U git+https://github.com/anki-code/fstrider
 ```
 
 ## Usage
