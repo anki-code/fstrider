@@ -96,7 +96,7 @@ Xonsh xontrib
     ++ Keeps history between running fstrider.
 
 Configuration
-    Load env config from file.
+    ++ Read env from `os.env`. See `fstrider.env`.
 
 Integration
     "=" to move object from path to the current dir.
@@ -105,7 +105,7 @@ Tech
     Errors processing
         Show errors like in case of exception.
         Process `File exists` error.
-    Resolve `/tmp/../../`.
+    ++ Resolve `/tmp/../../`.
     Symlinks: copying, moving   
     
 Style

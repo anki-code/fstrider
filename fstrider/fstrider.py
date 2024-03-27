@@ -52,6 +52,16 @@ class fstrider:
 
         self.bindings = KeyBindings()
 
+        self.load_env_from_os_env()
+
+
+    def load_env_from_os_env(self):
+        """Load settings from os env."""
+        for e in self.env:
+            val = os.environ.get('FSTRIDER_' + e.upper())
+            if val is not None:
+                self.env[e] = bool(eval(val))
+
 
     def run(self):
         """Start striding."""
