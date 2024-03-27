@@ -37,7 +37,7 @@ class fstrider:
         'keys_midnight_commander': True
     }
 
-    def __init__(self, current_path: Path = None):
+    def __init__(self, current_path = None):
         self.title = Label('Welcome to fstrider!')
         self.history = []
 
@@ -63,8 +63,12 @@ class fstrider:
                 self.env[e] = bool(eval(val))
 
 
-    def run(self):
+    def run(self, current_path = None):
         """Start striding."""
+
+        if current_path is not None:
+            self.current_path = Path(current_path).absolute()
+
         self.history_append(self.current_path)
 
         first_selected = None
