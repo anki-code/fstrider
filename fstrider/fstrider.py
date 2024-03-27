@@ -52,10 +52,6 @@ class fstrider:
 
         self.bindings = KeyBindings()
 
-        self.run()
-
-        Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
-
 
     def run(self):
         """Start striding."""
@@ -82,6 +78,9 @@ class fstrider:
         )
 
         application.run()
+
+        Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
+
 
     def load_style(self):
         """Load style."""

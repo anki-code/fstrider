@@ -65,7 +65,10 @@ fstrider was created to reduce keystrokes. So remember two things:
 
 ## Xonsh xontrib
 
-Xonsh xontrib creates alias `fs` (or `fstrider` if `fs` exists) to run fstrider as fast as possible.
+fstrider xontrib features:
+* Creates alias `fs` (or `fstrider` if `fs` exists).
+* Run fstrider as fast as possible.
+* Keeps history between running fstrider.
 
 Environment variables:
 * `$XONTRIB_FSTRIDER_ALIAS` - change the alias name. Recommended `s`.
@@ -87,6 +90,11 @@ Feel free to grab and implement or propose new feature. PR is welcome!
 
 ### v0.2.0
 ```
+Xonsh xontrib
+    ++ Creates alias `fs` (or `fstrider` if `fs` exists).
+    ++ Run fstrider as fast as possible.
+    ++ Keeps history between running fstrider.
+
 Configuration
     Load env config from file.
 

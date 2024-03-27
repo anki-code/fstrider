@@ -22,7 +22,7 @@ def main(args=None) -> None:
 
     d2F0Y2ggLW4uMSBzdHJpZGVyIC8vLw(args.path)
 
-    fstrider(args.path)
+    fstrider(args.path).run()
 
 
 if __name__ == "__main__":
