@@ -1,5 +1,6 @@
 """fstrider"""
 
+import asyncio
 import json
 import os
 import pathlib
@@ -83,7 +84,7 @@ class fstrider:
         )
         layout = Layout(self.root_container)
 
-        app = Application(
+        self.app = Application(
             layout=layout,
             key_bindings=merge_key_bindings([load_key_bindings(), self.bindings]),
             mouse_support=True,
@@ -91,7 +92,10 @@ class fstrider:
             style=self.style,
         )
 
-        app.run()
+        def pre_run():
+            self.app.create_background_task(self.invalidate_list())
+
+        self.app.run(pre_run=pre_run)
 
         Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
@@ -142,6 +146,16 @@ class fstrider:
 
         self.title.text = HTML(txt)
 
+    async def invalidate_list(self):
+        prev_list = list(Path(self.current_path).glob('*'))
+        while True:
+            curr_list = list(Path(self.current_path).glob('*'))
+            if curr_list != prev_list:
+                self.update_list(file_msg={p: 'New' for p in curr_list if p not in prev_list})
+                prev_list = curr_list
+
+            self.app.invalidate()
+            await asyncio.sleep(1)
 
     def create_list(self):
         """Create the main list."""
@@ -194,6 +208,7 @@ class fstrider:
                     else:
                         self.history_append(p)
                         self.stride(p.parent, title_msg='Jump', file_msg={p: 'Jump'}, selected_by_value=p)
+
             self.input_dialog(title='Jump', label_text='Jump to:', callback=callback)
 
         @radio_list.control.key_bindings.add("~")
