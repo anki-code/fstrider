@@ -128,7 +128,7 @@ List
 
 Jump
     Use path from clipboard e.g. `text_area.buffer.paste_clipboard_data`.
-    Use directories from history.
+    Use directories from xonsh history i.e. `__xonsh__.history[-1].cwd`
 ```
 
 ### v0.4.0
