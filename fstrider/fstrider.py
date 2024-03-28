@@ -83,7 +83,7 @@ class fstrider:
         )
         layout = Layout(self.root_container)
 
-        application = Application(
+        app = Application(
             layout=layout,
             key_bindings=merge_key_bindings([load_key_bindings(), self.bindings]),
             mouse_support=True,
@@ -91,7 +91,7 @@ class fstrider:
             style=self.style,
         )
 
-        application.run()
+        app.run()
 
         Path(self._app_associations_file).write_text(json.dumps(self.app_associations))
 
