@@ -489,7 +489,7 @@ class fstrider:
 
         copy_result = self.callback_copy(target_path, input_data)
 
-        self. callback_delete(source_path, input_data)
+        self.callback_delete(source_path, input_data)
         if copy_result == 'merge':
             msg = 'Merged with'
         else:
