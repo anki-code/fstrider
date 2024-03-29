@@ -3,6 +3,7 @@
 from asyncio import Future
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.widgets import (
+    RadioList,
     Button,
     Dialog,
     Label,
@@ -15,6 +16,11 @@ from prompt_toolkit.layout.containers import (
 from prompt_toolkit.layout.dimension import Dimension as D
 from prompt_toolkit.key_binding.key_bindings import KeyBindings
 from prompt_toolkit.filters import Condition
+
+
+class StriderRadioList(RadioList):
+    def get_selected_value(self):
+        return self.values[self._selected_index][0]
 
 class TextInputDialog:
     def __init__(self, title="", label_text="", text_area_text='', completer=None):

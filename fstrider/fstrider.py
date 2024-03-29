@@ -7,22 +7,24 @@ import pathlib
 import shutil
 import html
 import functools
+import itertools
 
 from pathlib import Path
 from asyncio import ensure_future
+from time import time
 
 from prompt_toolkit import HTML
 from prompt_toolkit.styles import Style
 from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.application import Application
-from prompt_toolkit.widgets import RadioList, Label
+from prompt_toolkit.widgets import Label
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.layout.containers import FloatContainer
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.key_bindings import KeyBindings, merge_key_bindings
 from prompt_toolkit.layout.containers import Float, HSplit
 
-from fstrider.ptk import TextInputDialog
+from fstrider.ptk import StriderRadioList, TextInputDialog
 from fstrider.clipboard import copy_to_clp
 from fstrider.os import open_in_os, get_os_applications, load_app_associations
 from fstrider.fs import access_type, copy_path
@@ -35,7 +37,8 @@ class fstrider:
         'os_path_change': True,
         'show_symlink_paths': True,
         'app_associations_save_file': False,
-        'keys_midnight_commander': True
+        'keys_midnight_commander': True,
+        'monitor_state': False,
     }
 
     def __init__(self, current_path = None):
@@ -93,7 +96,8 @@ class fstrider:
         )
 
         def pre_run():
-            self.app.create_background_task(self.invalidate_list())
+            if self.env['monitor_state']:
+                self.app.create_background_task(self.invalidate_list())
 
         self.app.run(pre_run=pre_run)
 
@@ -147,11 +151,11 @@ class fstrider:
         self.title.text = HTML(txt)
 
     async def invalidate_list(self):
-        prev_list = list(Path(self.current_path).glob('*'))
+        prev_list = itertools.islice(Path(self.current_path).glob('*'), 100)
         while True:
-            curr_list = list(Path(self.current_path).glob('*'))
+            curr_list = itertools.islice(Path(self.current_path).glob('*'), 100)
             if curr_list != prev_list:
-                self.update_list(file_msg={p: 'New' for p in curr_list if p not in prev_list})
+                self.update_list(selected_by_value=self.list.get_selected_value(), file_msg={p: 'Modified' for p in curr_list if time()-p.lstat().st_mtime < 30})
                 prev_list = curr_list
 
             self.app.invalidate()
@@ -160,10 +164,25 @@ class fstrider:
     def create_list(self):
         """Create the main list."""
         default = None
-        radio_list = RadioList([('', '')], default)
+        radio_list = StriderRadioList([('', '')], default)
         radio_list.open_character = radio_list.close_character = ''
-        radio_list.control.key_bindings.remove("enter")  # Remove the enter key binding so that we can augment it
-        radio_list.control.key_bindings.remove("space")
+
+        for rk in ['enter', 'space', 'up', 'down']:
+            radio_list.control.key_bindings.remove(rk)
+
+        @radio_list.control.key_bindings.add("up")
+        def _list_up(event) -> None:
+            if radio_list._selected_index == 0:
+                radio_list._selected_index = len(radio_list.values) - 1
+            else:
+                radio_list._selected_index = max(0, radio_list._selected_index - 1)
+
+        @radio_list.control.key_bindings.add("down")
+        def _list_down(event) -> None:
+            if radio_list._selected_index == len(radio_list.values) - 1:
+                radio_list._selected_index = 0
+            else:
+                radio_list._selected_index = min(len(radio_list.values) - 1, radio_list._selected_index + 1)
 
         @radio_list.control.key_bindings.add("left")
         def _list_left(event):
