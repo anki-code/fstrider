@@ -107,6 +107,7 @@ Xonsh xontrib
 
 List
     ++ Async monitoring of the list and update if new files created. (0.1.19)
+    
 Configuration
     ++ Read env from `os.env`. See `fstrider.env`. (0.1.19)
 
