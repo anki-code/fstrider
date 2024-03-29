@@ -4,7 +4,8 @@
 
 <p align="center">  
 <img src="https://repository-images.githubusercontent.com/772009748/a54b45b5-0dbc-4eef-81b1-11d618c6f9e1">
-
+</p>
+<p align="center">  
 If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20file%20system%20navigator!&url=https://github.com/anki-code/fstrider" target="_blank">tweet</a>.
 </p>
 
