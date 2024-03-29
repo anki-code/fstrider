@@ -86,11 +86,6 @@ Environment variables for fstrider xontrib:
 
 You can change the option state by setting environment variable e.g. `$FSTRIDER_MONITOR_STATE=True`.
 
-## Good to know
-
-* Copy the current path in MacOS Finder: <kbd>Option Command C</kbd>
-* Jump to path in MacOS Finder: <kbd>Command Shift G</kbd>
-
 ## Known issues
 
 ### Tested only on Mac OS
@@ -214,3 +209,8 @@ Xonsh shell
 AI
     Predict the next choice of path based on history and maybe files in dir.
 ```
+
+## Good to know
+
+* Copy the current path in MacOS Finder: <kbd>Option Command C</kbd>
+* Jump to path in MacOS Finder: <kbd>Command Shift G</kbd>
