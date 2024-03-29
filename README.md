@@ -70,8 +70,18 @@ fstrider xontrib features:
 * Run fstrider as fast as possible.
 * Keeps history between running fstrider.
 
-Environment variables:
+Environment variables for fstrider xontrib:
 * `$XONTRIB_FSTRIDER_ALIAS` - change the alias name. Recommended `s`.
+
+## Options
+
+* `'show_symlink_paths': True` - show symlinks in the list.
+* `'keys_midnight_commander': True` - use Midnight Commander keys.
+* `'monitor_state': False` - Async monitoring of the list and update if new files created.
+* `'os_path_change': True` - change os path in xonsh shell.
+* `'app_associations_save_file': False` - save filename to apps associations.
+
+You can change the option state by setting environment variable e.g. `$FSTRIDER_MONITOR_STATE=True`.
 
 ## Good to know
 
@@ -95,6 +105,8 @@ Xonsh xontrib
     ++ Run fstrider as fast as possible.
     ++ Keeps history between running fstrider.
 
+List
+    ++ Async monitoring of the list and update if new files created. (0.1.19)
 Configuration
     ++ Read env from `os.env`. See `fstrider.env`.
 
@@ -142,7 +154,7 @@ Dialog
     Copying progress bar or just the console log from `rsync`.
 
 Navigation
-    Up key at first option moves cursor to end.
+    ++ Up key at first option moves cursor to end. (0.1.19)
 ```
 
 ### v0.5.0
@@ -187,7 +199,6 @@ List
     Colors and gradient: by time, by size. Show old files with dark color. Show small files with dark color.
 Integration
     Catching pasting path from clipboard and ask actions: cd-ing, copy/move from, open.
-    Async update the list (https://github.com/anki-code/fstrider/issues/1) i.e. `app.create_background_task()`
     Using fstrider for anything e.g. striding around aws s3 bucket, ssh host.
         The way to setup fstrider for special needs: colors, menus, hotkeys.
 Keys
