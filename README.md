@@ -101,14 +101,14 @@ Feel free to grab and implement or propose new feature. PR is welcome!
 ### v0.2.0
 ```
 Xonsh xontrib
-    ++ Creates alias `fs` (or `fstrider` if `fs` exists).
-    ++ Run fstrider as fast as possible.
-    ++ Keeps history between running fstrider.
+    ++ Creates alias `fs` (or `fstrider` if `fs` exists). (0.1.18)
+    ++ Run fstrider as fast as possible. (0.1.18)
+    ++ Keeps history between running fstrider. (0.1.18)
 
 List
     ++ Async monitoring of the list and update if new files created. (0.1.19)
 Configuration
-    ++ Read env from `os.env`. See `fstrider.env`.
+    ++ Read env from `os.env`. See `fstrider.env`. (0.1.19)
 
 Integration
     "=" to move object from path to the current dir.
@@ -117,13 +117,14 @@ Tech
     Errors processing
         Show errors like in case of exception.
         Process `File exists` error.
-    ++ Resolve `/tmp/../../`.
+    ++ Resolve `/tmp/../../`. (0.1.17)
     Symlinks: copying, moving   
     
 Style
     Grey style for copy/move and red style for delete dialogue. 
     
 Navigation
+    ++ Up key at first option moves cursor to end. (0.1.19)
     Fix left key when go from history.    
     Fix right key when go to file from history.
 ```
@@ -152,9 +153,6 @@ Title
 Dialog
     Autocomplete for paths in menu - the feature from prompt-toolkit.
     Copying progress bar or just the console log from `rsync`.
-
-Navigation
-    ++ Up key at first option moves cursor to end. (0.1.19)
 ```
 
 ### v0.5.0
