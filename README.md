@@ -196,6 +196,7 @@ List
         Interstellar wormhole - path to another path added to this directory.
     Read the path from files in this directory.
     Colors and gradient: by time, by size. Show old files with dark color. Show small files with dark color.
+    
 Integration
     Catching pasting path from clipboard and ask actions: cd-ing, copy/move from, open.
     Using fstrider for anything e.g. striding around aws s3 bucket, ssh host.
