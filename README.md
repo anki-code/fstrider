@@ -123,6 +123,7 @@ Style
     Grey style for copy/move and red style for delete dialogue. 
     
 Navigation
+    Move coursor to the next file after deletion.
     ++ Up key at first option moves cursor to end. (0.1.19)
     Fix left key when go from history.    
     Fix right key when go to file from history.
