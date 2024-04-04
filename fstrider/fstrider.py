@@ -427,6 +427,7 @@ class fstrider:
         :return:
         """
         self.mode = 'list'
+        p = p if p else self.current_path
         self.set_current_path(p)
         self.set_title(p, msg=title_msg)
         if self.current_path.is_dir() and self.env['os_path_change']:
