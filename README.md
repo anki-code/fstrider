@@ -48,13 +48,13 @@ Basic:
 * <kbd>Right</kbd> - move to the selected directory.
 * <kbd>Space</kbd> - open menu for the current file or directory.
 * <kbd>Enter</kbd> - open file or directory using OS associations.
-* <kbd>Esc</kbd> - quit.
+* <kbd>Control q</kbd> - quit.
 
 Additional:
 
-* <kbd>Shift ~</kbd> - jump to the home directoy.
-* <kbd>Control j</kbd> - jump to path. You can jump into new path and then create it.
+* <kbd>Shift ~</kbd> - jump to the home directory.
 * <kbd>Control h</kbd> - jump to directory from history.
+* <kbd>Control j</kbd> - jump to path. You can jump into new path and then create it.
 * <kbd>Control +</kbd> - copy path to the current directory.
 
 Midnight Commander bindings: <kbd>F5</kbd> copy, <kbd>F6</kbd> move, <kbd>F7</kbd> rename, <kbd>F8</kbd> delete, <kbd>F10</kbd> quit, <kbd>F12</kbd> open with.
@@ -105,7 +105,7 @@ Xonsh xontrib
 
 List
     ++ Async monitoring of the list and update if new files created. (0.1.19)
-    Add `/` to the end of directory in title and in history.
+    ++Add `/` to the end of directory in title and in history.
     
 Configuration
     ++ Read env from `os.env`. See `fstrider.env`. (0.1.19)
@@ -114,21 +114,22 @@ Integration
     "=" to move object from path to the current dir.
 
 Tech
+    ++ Add list and menu mode.
     Errors processing
         Show errors like in case of exception.
         Process `File exists` error.
     ++ Resolve `/tmp/../../`. (0.1.17)
     Symlinks: copying, moving   
     
+    
 Style
     Grey style for copy/move and red style for delete dialogue. 
     
 Navigation
-    Add list and menu mode as filter for binding.
     Move coursor to the next file after deletion.
     ++ Up key at first option moves cursor to end. (0.1.19)
-    Fix left key when go from history.    
-    Fix right key when go to file from history.
+    ++ Fix left key when go from history.    
+    ++ Fix right key when go to file from history.
 ```
 
 ### v0.3.0
@@ -140,6 +141,7 @@ Navigation
 List
     Sorting by size/date `sorted(glob.glob('*.png'), key=os.path.getsize)`.
     Modes: short, full (chmod/chown/date). 
+    Keep file msg after `invalidate_list`.
 
 Jump
     Use path from clipboard e.g. `text_area.buffer.paste_clipboard_data`.

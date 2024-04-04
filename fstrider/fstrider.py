@@ -43,6 +43,7 @@ class fstrider:
 
     def __init__(self, current_path = None):
         self.title = Label('Welcome to fstrider!')
+        self.mode = 'list'
         self.history = []
 
         current_path = '.' if current_path is None else current_path
@@ -128,8 +129,9 @@ class fstrider:
 
     @staticmethod
     def format_path_accent(p : Path, color='grey'):
+        is_root = str(p) == '/'
         return f'<style fg="{color}">' + (html.escape(str(p.parent)) if str(p.parent) != '/' else '') \
-                + '/' + f'</style><style fg="{color}"><b>' + html.escape(p.name) + '</b></style>'
+                + '/' + f'</style><style fg="{color}"><b>' + html.escape(p.name) + ('/' if p.is_dir() and not is_root else '') + '</b></style>'
 
     def set_title(self, p: Path, msg=None):
         """Set the main title."""
@@ -151,14 +153,19 @@ class fstrider:
         self.title.text = HTML(txt)
 
     async def invalidate_list(self):
+        prev_p = self.current_path
         prev_list = itertools.islice(Path(self.current_path).glob('*'), 100)
         while True:
-            curr_list = itertools.islice(Path(self.current_path).glob('*'), 100)
-            if curr_list != prev_list:
-                self.update_list(selected_by_value=self.list.get_selected_value(), file_msg={p: 'Modified' for p in curr_list if time()-p.lstat().st_mtime < 30})
-                prev_list = curr_list
+            if self.mode == 'list':
+                curr_p = self.current_path
+                curr_list = itertools.islice(Path(self.current_path).glob('*'), 100)
 
-            self.app.invalidate()
+                if curr_p == prev_p and curr_list != prev_list:
+                    self.update_list(selected_by_value=self.list.get_selected_value(), file_msg={p: 'Modified' for p in curr_list if time()-p.lstat().st_mtime < 30 and p not in prev_list})
+                    prev_list = curr_list
+                    prev_p = curr_p
+
+                self.app.invalidate()
             await asyncio.sleep(1)
 
     def create_list(self):
@@ -186,12 +193,20 @@ class fstrider:
 
         @radio_list.control.key_bindings.add("left")
         def _list_left(event):
-            self.stride(self.current_path.parent)
+            if self.mode in ('list', 'menu'):
+                self.stride(self.current_path.parent, selected_by_value=self.current_path)
+            elif self.mode in ('history'):
+                self.stride(self.current_path, selected_by_value=self.current_path)
 
         @radio_list.control.key_bindings.add("enter")
         def _list_enter(event):
             radio_list._handle_enter()
+
+            if type(self.list.current_value) is pathlib.PosixPath:
+                self.history_append(self.list.current_value)
+
             selected_item = radio_list.current_value
+
             if type(selected_item) is pathlib.PosixPath:
                 self.stride(selected_by_value=radio_list.current_value, file_msg={radio_list.current_value: 'Open with OS'})
                 open_in_os(radio_list.current_value)
@@ -201,9 +216,12 @@ class fstrider:
         @radio_list.control.key_bindings.add("right")
         def _list_right(event):
             radio_list._handle_enter()
-            cv = radio_list.current_value
-            if type(cv) is pathlib.PosixPath and cv.is_dir():
-                self.stride(radio_list.current_value)
+            p = radio_list.current_value
+            if type(p) is pathlib.PosixPath:
+                if p.is_dir():
+                    self.stride(p)
+                else:
+                    self.stride(p.parent, selected_by_value=p)
             else:
                 # open_in_terminal(radio_list.current_value)
                 pass
@@ -211,11 +229,8 @@ class fstrider:
         @radio_list.control.key_bindings.add("space")
         def _list_space(event):
             radio_list._handle_enter()
-            if type(radio_list.current_value) is pathlib.PosixPath:
-                self.stride(radio_list.current_value, title_msg='Actions', update_list=False)
-                radio_list.values = self.list_file_actions(radio_list.current_value)
-                radio_list._selected_index = 0
-                self.history_append(radio_list.current_value)
+            if type(self.list.current_value) is pathlib.PosixPath:
+                self.show_actions_menu()
 
         @radio_list.control.key_bindings.add("c-j")
         def _key_jump(event):
@@ -245,6 +260,7 @@ class fstrider:
 
         @radio_list.control.key_bindings.add("c-h")
         def _key_jump_to_directory(event):
+            self.mode = 'history'
             radio_list._selected_index = 0
             radio_list.values = [(Path(p), HTML(self.format_path_accent(p))) for p in self.history][:100]
             self.set_title(self.current_path, msg='History')
@@ -253,7 +269,7 @@ class fstrider:
         def _key_copy_path(event):
             self.copy_path_clp(self.current_path)
 
-        @radio_list.control.key_bindings.add("escape")
+        @radio_list.control.key_bindings.add("c-q")
         def _key_exit(event):
             event.app.exit()
 
@@ -289,6 +305,15 @@ class fstrider:
 
         return radio_list
 
+    def show_actions_menu(self):
+        self.mode = 'menu'
+        self.set_title(self.list.current_value, msg='Actions')
+        self.set_current_path(self.list.current_value)
+
+        self.list.values = self.list_file_actions(self.list.current_value)
+        self.list._selected_index = 0
+
+        self.history_append(self.list.current_value)
 
     @staticmethod
     def sort_files_in_list(list_sets):
@@ -387,7 +412,11 @@ class fstrider:
         if selected_by_value:
             self.list._selected_index = self.get_index_in_values(self.list.values, payload=selected_by_value)
 
-    def stride(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None, update_list=True):
+    def set_current_path(self, p):
+        p = p if p else self.current_path
+        self.current_path = p.absolute()
+
+    def stride(self, p: Path = None, selected_by_value=None, title_msg=None, file_msg=None):
         """
         Stride to the path.
         :param p:
@@ -397,13 +426,12 @@ class fstrider:
         :param update_list:
         :return:
         """
-        p = p if p else self.current_path
-        self.current_path = p.absolute()
+        self.mode = 'list'
+        self.set_current_path(p)
         self.set_title(p, msg=title_msg)
         if self.current_path.is_dir() and self.env['os_path_change']:
             os.chdir(self.current_path)
-        if update_list:
-            self.update_list(selected_by_value=selected_by_value, title_msg=title_msg, file_msg=file_msg)
+        self.update_list(selected_by_value=selected_by_value, title_msg=title_msg, file_msg=file_msg)
 
     def do_open_with(self, path: Path = None):
         """Show "Open with" menu."""
