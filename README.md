@@ -105,6 +105,7 @@ Xonsh xontrib
 
 List
     ++ Async monitoring of the list and update if new files created. (0.1.19)
+    Add `/` to the end of directory in title and in history.
     
 Configuration
     ++ Read env from `os.env`. See `fstrider.env`. (0.1.19)
@@ -123,6 +124,7 @@ Style
     Grey style for copy/move and red style for delete dialogue. 
     
 Navigation
+    Add list and menu mode as filter for binding.
     Move coursor to the next file after deletion.
     ++ Up key at first option moves cursor to end. (0.1.19)
     Fix left key when go from history.    
