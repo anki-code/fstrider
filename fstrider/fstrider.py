@@ -39,6 +39,7 @@ class fstrider:
         'app_associations_save_file': False,
         'keys_midnight_commander': True,
         'monitor_state': False,
+        'monitor_state_sec': 2
     }
 
     def __init__(self, current_path = None):
@@ -160,13 +161,13 @@ class fstrider:
                 curr_p = self.current_path
                 curr_list = itertools.islice(Path(self.current_path).glob('*'), 100)
 
-                if curr_p == prev_p and curr_list != prev_list:
+                if curr_list != prev_list:
                     self.update_list(selected_by_value=self.list.get_selected_value(), file_msg={p: 'Modified' for p in curr_list if time()-p.lstat().st_mtime < 30 and p not in prev_list})
                     prev_list = curr_list
                     prev_p = curr_p
 
                 self.app.invalidate()
-            await asyncio.sleep(1)
+            await asyncio.sleep(self.env['monitor_state_sec'])
 
     def create_list(self):
         """Create the main list."""
