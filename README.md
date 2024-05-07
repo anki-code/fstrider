@@ -136,7 +136,7 @@ Navigation
 
 ```
 Navigation
-    Go back to previous directory after moving or copying.
+    Key+Left - Go back to previous screen after moving/copying/etc.
     
 List
     Sorting by size/date `sorted(glob.glob('*.png'), key=os.path.getsize)`.
