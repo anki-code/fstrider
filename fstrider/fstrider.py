@@ -203,12 +203,12 @@ class fstrider:
         def _list_enter(event):
             radio_list._handle_enter()
 
-            if type(self.list.current_value) is pathlib.Path:
+            if issubclass(type(self.list.current_value), pathlib.Path):
                 self.history_append(self.list.current_value)
 
             selected_item = radio_list.current_value
 
-            if type(selected_item) is pathlib.Path:
+            if issubclass(type(selected_item), pathlib.Path):
                 self.stride(selected_by_value=radio_list.current_value, file_msg={radio_list.current_value: 'Open with OS'})
                 open_in_os(radio_list.current_value)
             elif callable(selected_item):
@@ -218,7 +218,7 @@ class fstrider:
         def _list_right(event):
             radio_list._handle_enter()
             p = radio_list.current_value
-            if type(p) is pathlib.Path:
+            if issubclass(type(p), pathlib.Path):
                 if p.is_dir():
                     self.stride(p)
                 else:
@@ -230,7 +230,7 @@ class fstrider:
         @radio_list.control.key_bindings.add("space")
         def _list_space(event):
             radio_list._handle_enter()
-            if type(self.list.current_value) is pathlib.Path:
+            if issubclass(type(self.list.current_value), pathlib.Path):
                 self.show_actions_menu()
 
         @radio_list.control.key_bindings.add("c-j")
