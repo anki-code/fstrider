@@ -5,9 +5,6 @@
 <p align="center">  
 <img src="https://repository-images.githubusercontent.com/772009748/a54b45b5-0dbc-4eef-81b1-11d618c6f9e1" width="50%">
 </p>
-<p align="center">  
-If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20file%20system%20navigator!&url=https://github.com/anki-code/fstrider" target="_blank">tweet</a>.
-</p>
 
 
 **fstrider** is:
@@ -16,6 +13,28 @@ If you like it click ⭐ on the repo and <a href="https://twitter.com/intent/twe
 * to be minimalistic until it's needed to do more.
 * to create new paths without annoying asking.
 
+## ⛔ Archived
+
+The project was archived because you can replace it by [ranger](https://github.com/ranger/ranger) with `~/.config/ranger/rc.conf`:
+
+```python
+set column_ratios 0,3,0
+set hostname_in_titlebar false
+set show_selection_in_titlebar false
+
+map <F8> console delete
+map j console cd%space
+map ` shell xonsh --no-rc
+
+set preview_images false
+set preview_files false
+set preview_directories false
+
+set show_hidden true
+
+# git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
+default_linemode devicons
+```
 
 ## Install
 
